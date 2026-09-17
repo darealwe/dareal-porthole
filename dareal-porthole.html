@@ -1,0 +1,1797 @@
+<!DOCTYPE html><html lang="zh-CN" data-lvt-canonical="1" data-page-node-id="TZ84kkN1qS9g5zZctAygOC"><head data-page-node-id="CSuOjcjqquElyorku734J9">
+<meta charset="UTF-8" data-page-node-id="tber6fAlW9Oqz7YJpE1Ein">
+<meta name="viewport" content="width=device-width,initial-scale=1" data-page-node-id="qtVpq28KJowWM0UekcrxQB">
+<title>DA REAL — 品牌设计师</title>
+<meta name="description" content="DA REAL 品牌设计师，专注品牌、包装与商业视觉。" data-page-node-id="ccrXyCAIMxrRTGE8V6XUIt">
+<link rel="preconnect" href="https://fonts.googleapis.com" data-page-node-id="VkoIoAsYQfAESshllYieMx">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" data-page-node-id="5rotPf8LRobaARqu6Wc3JL">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Noto+Sans+SC:wght@400;500;700;900&amp;display=swap" rel="stylesheet" data-page-node-id="HRHlhqcrPnrSj89c7Mmc6x">
+<!-- GSAP 3 + ScrollTrigger CDN（失败时自动回退为普通顺序布局） -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" crossorigin="anonymous"></script>
+<style>
+/* ============================================================ RESET */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{font-family:'Inter','Noto Sans SC','PingFang SC',system-ui,sans-serif;background:#0A1B2E;color:#F2F7FB;overflow-x:hidden}
+img,video{display:block;max-width:100%}
+a{text-decoration:none;color:inherit}
+button{cursor:pointer;border:none;background:none;font-family:inherit;color:inherit}
+
+/* ============================================================ TOKENS */
+:root{
+  --ink:#0A1B2E;
+  --navy:#103A5C;
+  --sky:#3FA0E0;
+  --mist:#BBD9EE;
+  --near-white:#F2F7FB;
+  --body-blue:#C9D8E4;
+  --divider:rgba(242,247,251,.18);
+  --ez:cubic-bezier(.22,1,.36,1);
+  --ez2:cubic-bezier(.4,0,.2,1);
+  --cover:#E2E3E4;            /* 开屏 4 竖列同色块底色（柔灰，参考实测） */
+}
+
+/* ============================================================ PRELOADER
+   纯 CSS 驱动开屏动画（不依赖 JS 才出现）
+   逻辑（对齐参考：4 竖列同色块，自上而下依次擦除揭幕）：
+     0–1.4s   4 竖列柔灰铺满 + 中央 DA REAL 字标淡入→淡出
+     1.5s起   4 竖列自上而下依次擦除（clip-path，错峰 0.06s → 层次/阶梯）
+     ~2.25s   擦除完成，#preloader display:none，hero 完整露出
+   ============================================================ */
+
+/* ---- CSS 兜底：总时长后无条件隐藏，防 JS 失败 ---- */
+@keyframes pl-auto-hide{
+  0%,62%{ opacity:1; visibility:visible; pointer-events:all; }
+  78%{ opacity:0; }
+  100%{ opacity:0; visibility:hidden; pointer-events:none; }
+}
+
+/* ---- 开屏容器：默认可见，第 0 帧就展示 ---- */
+#preloader{
+  position:fixed;inset:0;
+  z-index:9000;
+  background:transparent;
+  overflow:hidden;
+  /* 默认可见，拦截指针 */
+  opacity:1;
+  visibility:visible;
+  pointer-events:all;
+  /* CSS 兜底：约 2.6s 后必然隐藏（JS 接管后会被取消） */
+  animation: pl-auto-hide 2.6s linear 0s forwards;
+}
+/* JS 接管后取消 CSS 兜底动画，由 JS 全权控制（含擦除与收尾） */
+#preloader.js-driven{ animation:none !important; }
+
+/* ---- DA REAL 字标：纯 CSS 淡入停留淡出 ---- */
+#intro-logo{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  text-align:center;
+  user-select:none;
+  pointer-events:none;
+  z-index:2;
+  animation: pl-logo-show 1.5s ease 0s forwards;
+}
+@keyframes pl-logo-show{
+  0%  { opacity:0; transform:translate(-50%,-50%) translateY(8px); }
+  12% { opacity:1; transform:translate(-50%,-50%) translateY(0); }
+  78% { opacity:1; transform:translate(-50%,-50%) translateY(0); }
+  92% { opacity:0; transform:translate(-50%,-50%) translateY(-8px); }
+  100%{ opacity:0; transform:translate(-50%,-50%) translateY(-8px); }
+}
+#intro-logo .pl-brand{
+  display:block;
+  font-family:'Space Grotesk','Inter','Helvetica Neue',Arial,sans-serif;
+  font-weight:700;
+  font-size:clamp(18px,1.6vw,26px);
+  letter-spacing:.28em;
+  color:#111418;
+  text-transform:uppercase;
+  line-height:1;
+}
+#intro-logo .pl-sub{
+  display:block;
+  margin-top:10px;
+  font-family:'Space Grotesk','Inter','Helvetica Neue',Arial,sans-serif;
+  font-weight:500;
+  font-size:clamp(9px,.85vw,11px);
+  letter-spacing:.3em;
+  color:rgba(17,20,24,.4);
+  text-transform:uppercase;
+  line-height:1;
+}
+/* 删除旧的 pl-logo-enter 和 pl-logo-exit，改用 pl-logo-show */
+@keyframes pl-logo-show-unused{}
+
+/* ---- 4 竖列同色块遮罩（静态 HTML，纯 CSS 动画，方向：自上而下擦除） ---- */
+#preloader .stripe{
+  position:absolute;top:0;height:100%;
+  width:calc(25% + 1px);               /* 重叠 1px 杜绝半像素缝 */
+  background:var(--cover);
+  z-index:1;
+  will-change:clip-path;
+  clip-path:inset(0 0 0 0);            /* 默认铺满（不裁切） */
+}
+#preloader .s1{ left:0; }
+#preloader .s2{ left:25%; }
+#preloader .s3{ left:50%; }
+#preloader .s4{ left:75%; }
+/* 自上而下擦除：clip-path 顶部 inset 0 → 100%，柔灰从顶部退出、hero 顶部先露 */
+#preloader.out .stripe{ animation: wipe-top .5s cubic-bezier(.76,0,.24,1) forwards; }
+#preloader.out .s1{ animation-delay:0s; }
+#preloader.out .s2{ animation-delay:.06s; }
+#preloader.out .s3{ animation-delay:.12s; }
+#preloader.out .s4{ animation-delay:.18s; }
+@keyframes wipe-top{
+  from{ clip-path:inset(0 0 0 0); }
+  to  { clip-path:inset(100% 0 0 0); }
+}
+
+/* ---- 主内容导航/hint：开屏期间隐藏，cleanup 后淡入 ---- */
+/* 默认隐藏（开屏在上面），cleanup 加 .pl-in 或 CSS 兆底后自动可见 */
+#hero .hero-title-line{
+  opacity:0;
+  transform:translateY(20px);
+  transition:opacity .8s cubic-bezier(.22,1,.36,1),transform .8s cubic-bezier(.22,1,.36,1);
+}
+#hero .hero-title-line.pl-in{
+  opacity:1;
+  transform:translateY(0);
+}
+#hero .hero-title-line:nth-child(2){
+  transition-delay:.12s;
+}
+#nav-wrap,#hero .hero-hint,#hero .hero-scroll{
+  opacity:0;
+  transition:opacity .5s ease;
+}
+#nav-wrap.pl-in,#hero .hero-hint.pl-in,#hero .hero-scroll.pl-in{opacity:1}
+/* CSS 兆底：3.1s 后导航也强制可见 */
+@keyframes nav-auto-show{ to{ opacity:1; } }
+#nav-wrap,#hero .hero-hint,#hero .hero-scroll{
+  animation: nav-auto-show .4s ease 3.1s forwards;
+}
+
+/* ---- reduced-motion 兜底 ---- */
+@media(prefers-reduced-motion:reduce){
+  #preloader{display:none !important}
+  #nav-wrap,#hero .hero-hint,#hero .hero-scroll{opacity:1 !important;transition:none;animation:none}
+  #hero .hero-title-line{opacity:1 !important;transform:none !important;transition:none}
+  #intro-logo{animation:none}
+  #preloader .stripe{animation:none !important;clip-path:inset(0 0 0 0) !important}
+}
+
+/* ============================================================ HERO */
+#hero{
+  position:relative;
+  width:100vw;height:100vh;
+  overflow:hidden;
+  opacity:1;
+}
+
+.hero-video{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:cover;
+  display:block;
+}
+/* 压暗渐变保证文字可读 */
+.hero-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(
+    to bottom,
+    rgba(10,27,46,.25) 0%,
+    rgba(10,27,46,.1) 40%,
+    rgba(10,27,46,.55) 100%
+  );
+  pointer-events:none;
+}
+/* 首屏点击区域（整屏可点） */
+.hero-click{
+  position:absolute;inset:0;
+  cursor:pointer;
+  z-index:2;
+}
+/* 右下角提示 */
+.hero-hint{
+  position:absolute;bottom:clamp(24px,4vh,48px);right:clamp(24px,4vw,56px);
+  z-index:3;
+  display:flex;align-items:center;gap:8px;
+  font-size:clamp(10px,.85vw,13px);font-weight:500;letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(242,247,251,.55);
+  pointer-events:none;
+  animation:hintPulse 2.8s ease-in-out infinite;
+}
+@keyframes hintPulse{0%,100%{opacity:.55}50%{opacity:.9}}
+.hero-hint-icon{
+  width:28px;height:28px;border-radius:50%;
+  border:1.5px solid rgba(242,247,251,.4);
+  display:flex;align-items:center;justify-content:center;
+}
+.hero-hint-icon svg{width:12px;height:12px;stroke:rgba(242,247,251,.7);fill:none;stroke-width:1.5}
+
+/* SCROLL 提示 */
+.hero-scroll{
+  position:absolute;bottom:clamp(20px,3.5vh,40px);left:50%;transform:translateX(-50%);
+  z-index:3;
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  font-size:10px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(242,247,251,.35);
+  pointer-events:none;
+}
+.hero-scroll-line{width:1px;height:28px;background:rgba(242,247,251,.25);animation:scrollBob 2.2s ease-in-out infinite}
+@keyframes scrollBob{0%,100%{transform:scaleY(1)}50%{transform:scaleY(.6)}}
+
+/* ============================================================ COVER LAYER（整屏毛玻璃封面） */
+#cover-layer{
+  position:fixed;inset:0;z-index:500;
+  background:linear-gradient(160deg,rgba(10,27,46,.82) 0%,rgba(5,12,22,.92) 100%);
+  backdrop-filter:blur(22px) saturate(130%);
+  -webkit-backdrop-filter:blur(22px) saturate(130%);
+  opacity:0;pointer-events:none;
+  transform:translateY(12px);
+  transition:opacity .5s var(--ez),transform .5s var(--ez);
+  overflow:hidden;
+  display:flex;flex-direction:column;
+}
+#cover-layer.open{
+  opacity:1;pointer-events:auto;transform:translateY(0);
+}
+
+/* 关闭按钮 */
+.cover-close{
+  position:absolute;top:clamp(16px,2.5vh,32px);right:clamp(20px,3vw,48px);
+  width:40px;height:40px;border-radius:50%;
+  border:1.5px solid rgba(242,247,251,.35);
+  display:flex;align-items:center;justify-content:center;
+  color:rgba(242,247,251,.7);font-size:18px;font-weight:300;
+  transition:background .2s,color .2s,border-color .2s;
+  z-index:10;
+}
+.cover-close:hover{background:rgba(242,247,251,.12);color:#F2F7FB;border-color:rgba(242,247,251,.6)}
+
+/* 封面内容区 */
+.cover-body{
+  flex:1;display:grid;
+  grid-template-rows:auto 1fr auto auto;
+  padding:clamp(48px,7vh,80px) clamp(24px,5vw,72px) clamp(20px,3vh,40px);
+  gap:0;
+  height:100%;
+  overflow:hidden;
+  width:100%;
+  min-width:0;
+}
+
+/* 顶部行：黑卡 + 右侧空 */
+.cover-top-row{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  margin-bottom:clamp(8px,1.5vh,20px);
+}
+
+/* 黑色信息卡 */
+.cover-black-card{
+  background:rgba(5,10,18,.88);
+  border-radius:6px;
+  padding:clamp(14px,2vw,24px) clamp(14px,2vw,24px);
+  width:clamp(200px,26vw,380px);
+  display:flex;flex-direction:column;
+  gap:clamp(8px,1.2vw,16px);
+}
+.cover-card-header{
+  display:flex;align-items:flex-start;justify-content:space-between;gap:12px;
+}
+.cover-card-thanks{
+  font-size:clamp(9px,1vw,14px);font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(242,247,251,.9);line-height:1.55;
+}
+/* REAL 水滴符号 */
+.real-symbol{
+  flex-shrink:0;
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+}
+.real-symbol-name{
+  font-size:clamp(8px,.9vw,12px);font-weight:800;letter-spacing:.06em;
+  color:#F2F7FB;
+}
+.real-symbol-mark{
+  width:clamp(28px,3vw,42px);height:clamp(28px,3vw,42px);
+  border-radius:50%;border:1.5px solid rgba(242,247,251,.5);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+}
+.real-symbol-cross{font-size:clamp(7px,.75vw,10px);color:rgba(242,247,251,.6);line-height:1}
+.real-symbol-text{font-size:clamp(6px,.65vw,9px);font-weight:700;letter-spacing:.08em;color:#F2F7FB;line-height:1}
+
+.cover-card-services{
+  display:flex;flex-direction:column;gap:3px;
+  border-top:1px solid rgba(242,247,251,.12);
+  padding-top:clamp(6px,.8vw,10px);
+}
+.cover-card-svc{
+  font-size:clamp(8px,.85vw,12px);font-weight:500;letter-spacing:.06em;
+  color:rgba(242,247,251,.8);line-height:1.5;
+}
+.cover-card-svc.en{
+  font-size:clamp(7px,.75vw,10px);
+  color:rgba(242,247,251,.45);letter-spacing:.08em;text-transform:uppercase;
+}
+
+/* 中部：Portfolio 巨字 */
+.cover-mid{
+  display:flex;align-items:flex-end;
+  position:relative;
+  overflow:hidden;
+  width:100%;
+  min-height:clamp(80px,14vw,200px);
+}
+.cover-portfolio{
+  font-size:clamp(64px,18vw,260px);
+  font-weight:900;
+  letter-spacing:-.04em;
+  line-height:.88;
+  color:rgba(242,247,251,.88);
+  white-space:nowrap;
+  user-select:none;
+  overflow:hidden;
+  width:100%;
+  display:block;
+}
+.cover-percent{
+  position:absolute;
+  right:clamp(24px,5vw,72px);
+  top:0;
+  font-size:clamp(24px,5vw,72px);
+  font-weight:900;
+  letter-spacing:-.02em;
+  color:rgba(242,247,251,.65);
+  user-select:none;
+}
+
+/* 中文三字行 */
+.cover-cn-row{
+  display:flex;align-items:baseline;justify-content:space-between;
+  padding:clamp(8px,1.5vh,20px) 0;
+  border-top:1px solid rgba(242,247,251,.12);
+  border-bottom:1px solid rgba(242,247,251,.12);
+  margin:clamp(6px,1vh,14px) 0;
+}
+.cover-cn-item{
+  font-size:clamp(20px,5.5vw,80px);
+  font-weight:900;
+  letter-spacing:.02em;
+  color:rgba(242,247,251,.9);
+  font-family:'Noto Sans SC','PingFang SC',sans-serif;
+}
+
+/* 底栏 */
+.cover-bottom-row{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:clamp(8px,2vw,24px);
+  padding-top:clamp(8px,1.5vh,16px);
+}
+.cover-bottom-item{
+  display:flex;flex-direction:column;gap:3px;
+}
+.cover-bottom-key{
+  font-size:clamp(8px,.8vw,11px);font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(242,247,251,.4);
+}
+.cover-bottom-val{
+  font-size:clamp(11px,1.4vw,20px);font-weight:500;
+  color:rgba(242,247,251,.85);
+}
+
+/* 移动端封面调整 */
+@media(max-width:767px){
+  .cover-body{padding:56px 20px 20px}
+  .cover-black-card{width:min(80vw,280px)}
+  .cover-portfolio{font-size:clamp(52px,18vw,120px)}
+  .cover-percent{font-size:clamp(18px,5vw,36px)}
+  .cover-cn-item{font-size:clamp(16px,6vw,40px)}
+  .cover-bottom-row{grid-template-columns:1fr 1fr}
+  .cover-bottom-val{font-size:clamp(12px,3.5vw,18px)}
+}
+
+/* ============================================================ NAV（胶囊毛玻璃） */
+#nav-wrap{
+  position:fixed;top:clamp(12px,2vh,20px);left:0;right:0;
+  z-index:400;
+  display:flex;align-items:center;justify-content:center;
+  padding:0 clamp(16px,3vw,48px);
+  pointer-events:none;
+}
+/* 主胶囊 */
+.nav-pill{
+  position:relative;
+  display:flex;align-items:center;
+  background:rgba(242,247,251,.14);
+  backdrop-filter:blur(20px) saturate(140%);
+  -webkit-backdrop-filter:blur(20px) saturate(140%);
+  border:1px solid rgba(242,247,251,.22);
+  border-radius:100px;
+  padding:0 clamp(6px,1vw,12px);
+  height:clamp(38px,4.5vh,48px);
+  box-shadow:0 4px 24px rgba(10,27,46,.25),0 1px 0 rgba(242,247,251,.08) inset;
+  pointer-events:auto;
+  gap:0;
+}
+/* 高亮滑块 */
+.nav-highlight{
+  position:absolute;
+  top:4px;bottom:4px;
+  background:rgba(242,247,251,.28);
+  border-radius:100px;
+  transition:left .35s var(--ez),width .35s var(--ez);
+  pointer-events:none;
+  z-index:0;
+}
+.nav-item{
+  position:relative;z-index:1;
+  padding:0 clamp(10px,1.4vw,20px);
+  height:100%;
+  display:flex;align-items:center;
+  font-size:clamp(11px,1vw,14px);font-weight:500;letter-spacing:.04em;
+  color:rgba(242,247,251,.75);
+  white-space:nowrap;
+  transition:color .2s;
+  border-radius:100px;
+  cursor:pointer;
+  user-select:none;
+}
+.nav-item:hover{color:#F2F7FB}
+.nav-item.active{color:#F2F7FB;font-weight:600}
+
+/* 右侧独立 menu 胶囊 */
+.nav-menu-pill{
+  margin-left:clamp(8px,1.2vw,16px);
+  background:rgba(242,247,251,.12);
+  backdrop-filter:blur(20px) saturate(140%);
+  -webkit-backdrop-filter:blur(20px) saturate(140%);
+  border:1px solid rgba(242,247,251,.2);
+  border-radius:100px;
+  padding:0 clamp(12px,1.5vw,20px);
+  height:clamp(38px,4.5vh,48px);
+  display:flex;align-items:center;
+  font-size:clamp(11px,1vw,13px);font-weight:500;letter-spacing:.06em;
+  color:rgba(242,247,251,.7);
+  cursor:pointer;
+  pointer-events:auto;
+  transition:background .2s,color .2s;
+  white-space:nowrap;
+}
+.nav-menu-pill:hover{background:rgba(242,247,251,.22);color:#F2F7FB}
+
+/* 移动端：只保留 Main + menu */
+@media(max-width:767px){
+  .nav-item:not(.nav-main){display:none}
+  .nav-pill{padding:0 4px}
+}
+
+/* 移动端全屏菜单 */
+#mobile-menu{
+  display:none;position:fixed;inset:0;z-index:600;
+  background:rgba(10,27,46,.96);
+  backdrop-filter:blur(20px);
+  flex-direction:column;align-items:center;justify-content:center;gap:clamp(24px,5vh,40px);
+}
+#mobile-menu.open{display:flex}
+#mobile-menu a{
+  font-size:clamp(24px,6vw,40px);font-weight:700;
+  color:rgba(242,247,251,.85);letter-spacing:.02em;
+  transition:color .2s;
+}
+#mobile-menu a:hover{color:#F2F7FB}
+.mob-close{
+  position:absolute;top:20px;right:clamp(20px,4vw,48px);
+  font-size:22px;color:rgba(242,247,251,.5);
+}
+
+/* ============================================================ MAIN CONTENT */
+#main{background:#F2F7FB;color:#0A1B2E}
+
+.sec{padding:clamp(72px,10vw,140px) clamp(24px,6vw,96px)}
+.sec-inner{max-width:1320px;margin:0 auto}
+.sec-label{
+  display:block;
+  font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;
+  color:#3FA0E0;margin-bottom:14px;
+}
+.sec-title{
+  font-size:clamp(48px,7vw,104px);font-weight:900;
+  letter-spacing:-.03em;line-height:1.0;
+  color:#0A1B2E;margin-bottom:6px;
+}
+.sec-title-en{
+  font-size:clamp(13px,1.3vw,17px);font-weight:500;letter-spacing:.08em;
+  color:#3FA0E0;margin-bottom:clamp(40px,6vw,80px);
+}
+
+/* ============================================================ ABOUT */
+#about{background:#EAF3FB}
+.about-grid{
+  display:grid;grid-template-columns:clamp(200px,28%,380px) 1fr;
+  gap:clamp(32px,6vw,96px);align-items:start;
+}
+.about-img{
+  position:relative;border-radius:10px;overflow:hidden;
+  border:1px solid rgba(63,160,224,.25);aspect-ratio:4/5;
+}
+.about-img img{width:100%;height:100%;object-fit:cover;display:block}
+/* 制图角标 */
+.about-img::before,.about-img::after{
+  content:'';position:absolute;width:18px;height:18px;
+  border-color:rgba(63,160,224,.5);border-style:solid;
+}
+.about-img::before{top:12px;left:12px;border-width:1px 0 0 1px}
+.about-img::after{bottom:12px;right:12px;border-width:0 1px 1px 0}
+.about-name{
+  font-size:clamp(32px,5vw,72px);font-weight:900;
+  letter-spacing:-.025em;color:#0A1B2E;
+  margin-bottom:6px;line-height:1.05;
+}
+.about-sub{
+  font-size:clamp(14px,1.4vw,18px);font-weight:500;
+  color:#3FA0E0;margin-bottom:clamp(16px,2.5vw,28px);
+}
+.about-body{
+  font-size:clamp(14px,1.3vw,17px);color:rgba(10,27,46,.65);
+  line-height:1.85;margin-bottom:14px;
+}
+.about-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:clamp(16px,2.5vw,28px)}
+.about-tag{
+  font-size:12px;font-weight:500;letter-spacing:.06em;
+  color:#103A5C;border:1px solid #BBD9EE;
+  padding:5px 12px;border-radius:4px;
+}
+@media(max-width:767px){
+  .about-grid{grid-template-columns:1fr}
+  .about-img{max-width:260px}
+}
+
+/* ============================================================ WORKS — 整屏吸附序列 */
+#works{
+  position:relative;
+}
+/* 章节指示器（固定在右下角，works 可见时显示） */
+#works-indicator{
+  position:fixed;
+  bottom:clamp(20px,3vh,36px);
+  right:clamp(20px,3vw,48px);
+  z-index:300;
+  display:flex;align-items:center;gap:10px;
+  opacity:0;pointer-events:none;
+  transition:opacity .4s ease;
+}
+#works-indicator.vis{opacity:1}
+.wi-num{
+  font-size:clamp(11px,1vw,13px);font-weight:600;letter-spacing:.14em;
+  color:rgba(242,247,251,.55);
+}
+.wi-bar{
+  width:clamp(32px,4vw,56px);height:1px;
+  background:rgba(242,247,251,.2);
+  position:relative;overflow:hidden;
+}
+.wi-bar-fill{
+  position:absolute;top:0;left:0;height:100%;
+  background:rgba(242,247,251,.7);
+  transition:width .5s var(--ez);
+}
+.wi-name{
+  font-size:clamp(10px,.9vw,12px);font-weight:500;letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(242,247,251,.45);
+}
+
+/* ================================================================
+   WORKS — GSAP ScrollTrigger 堆叠 3D 卡片（景深增强版）
+   结构：#works(540vh 行程) > .works-pin(sticky 100dvh) > .works-stack(3D) > 4×.ws-card
+   全部可调参数集中在下方 JS 参数表：
+     PERSPECTIVE 700 / ROTATE_X 22 / Y_PERCENT 105 / SCALE_FROM 0.86 /
+     SCRUB 1.2 / SCALE_PUSHED 0.91 / PUSH_TILT -4 / PUSH_BLUR 1.5 /
+     PUSH_DIM 0.72 / ENTER_BLUR 6 / REVEAL_RATIO 0.45 / PUSH_SETTLE 0.5
+   ================================================================ */
+
+#works{
+  position:relative;
+  /* 1 屏展示 + 4.4 屏滚动行程：改这里 = 改翻页快慢（JS 的 end 会自适应） */
+  height:540vh;
+}
+.works-pin{
+  position:sticky;top:0;
+  height:100vh;height:100dvh;
+}
+.works-stack{
+  position:relative;
+  width:100%;
+  height:100%;
+  perspective:700px; /* 可调：越小倾斜越夸张，越大越平 */
+  overflow:hidden; /* GSAP 激活时裁切溢出；回退态由 JS 移除 */
+}
+.ws-card{
+  position:absolute;
+  inset:0;
+  transform-origin:center bottom; /* 可调：top=从上翻，bottom=从下翻 */
+  will-change:transform,opacity,filter;
+  backface-visibility:hidden; /* 防止旋转时背面透出/模糊拖影 */
+  display:flex;
+  align-items:stretch;
+  overflow:hidden;
+}
+.ws-card[data-idx="0"]{background:linear-gradient(160deg,#0A1B2E 0%,#103A5C 100%)}
+.ws-card[data-idx="1"]{background:linear-gradient(160deg,#0B1622 0%,#16263A 100%)}
+.ws-card[data-idx="2"]{background:linear-gradient(160deg,#1259A8 0%,#2F86D6 100%)}
+.ws-card[data-idx="3"]{background:linear-gradient(160deg,#0E2238 0%,#1B3E63 100%)}
+
+.ws-content{
+  flex:1;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  grid-template-rows:1fr;
+  padding:clamp(64px,8vh,96px) clamp(32px,5vw,80px) clamp(32px,5vh,56px);
+  gap:clamp(24px,4vw,56px);
+  position:relative;
+  z-index:2;
+  min-height:0;
+}
+.ws-left{
+  display:flex;flex-direction:column;
+  justify-content:space-between;
+}
+.ws-title{
+  font-size:clamp(34px,5.2vw,76px);font-weight:900;
+  letter-spacing:-.03em;line-height:1.05;
+  color:#F2F7FB;
+  margin-bottom:clamp(16px,2.5vw,28px);
+}
+.ws-meta{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:8px clamp(16px,2.5vw,32px);
+  margin-bottom:clamp(20px,3vw,36px);
+  padding-bottom:clamp(16px,2.5vw,28px);
+  border-bottom:1px solid rgba(242,247,251,.12);
+}
+.ws-meta-item{display:flex;flex-direction:column;gap:3px}
+.ws-meta-key{
+  font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+  color:rgba(242,247,251,.35);
+}
+.ws-meta-val{
+  font-size:clamp(11px,1vw,14px);font-weight:500;
+  color:rgba(242,247,251,.7);
+}
+.ws-desc{
+  font-size:clamp(13px,1.2vw,17px);font-weight:400;
+  color:rgba(242,247,251,.55);
+  line-height:1.75;
+  max-width:480px;
+  flex:1;
+}
+.ws-cta{
+  margin-top:clamp(24px,4vh,48px);
+  align-self:flex-start;
+  font-size:clamp(13px,1.1vw,16px);font-weight:600;letter-spacing:.04em;
+  color:#0A1B2E;
+  background:#F2F7FB;
+  border:2px solid #F2F7FB;
+  padding:clamp(12px,1.5vw,18px) clamp(28px,3.5vw,48px);
+  border-radius:100px;
+  cursor:pointer;
+  transition:background .3s,color .3s,border-color .3s,box-shadow .3s;
+  position:relative;overflow:hidden;
+}
+.ws-cta:hover{
+  background:transparent;
+  color:#F2F7FB;
+  border-color:#F2F7FB;
+  box-shadow:0 0 0 1px rgba(242,247,251,.3);
+}
+.ws-right{
+  display:flex;flex-direction:column;
+  align-items:flex-end;
+  justify-content:space-between;
+  position:relative;
+}
+.ws-num{
+  font-size:clamp(96px,16vw,240px);font-weight:300;
+  letter-spacing:-.04em;line-height:.85;
+  color:rgba(242,247,251,.12);
+  position:absolute;top:0;right:0;
+  user-select:none;pointer-events:none;
+  z-index:0;
+}
+.ws-side-label{
+  position:absolute;
+  right:-clamp(12px,1.5vw,20px);
+  top:50%;
+  transform:translateY(-50%) rotate(90deg);
+  transform-origin:center;
+  font-size:10px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(242,247,251,.2);
+  white-space:nowrap;
+  pointer-events:none;
+}
+.ws-img-wrap{
+  position:relative;z-index:1;
+  width:100%;
+  flex:1;
+  border-radius:16px;
+  overflow:hidden;
+  margin-top:clamp(16px,3vh,32px);
+}
+.ws-img-wrap img{
+  width:100%;height:100%;object-fit:cover;display:block;
+}
+@media(max-width:767px){
+  .ws-content{
+    grid-template-columns:1fr;
+    grid-template-rows:auto 1fr;
+    padding:clamp(56px,8vh,72px) clamp(20px,5vw,32px) clamp(20px,4vh,32px);
+    gap:clamp(16px,3vw,24px);
+  }
+  .ws-right{align-items:flex-start}
+  .ws-num{font-size:clamp(64px,18vw,120px)}
+  .ws-img-wrap{min-height:clamp(180px,35vw,280px);flex:none}
+  .ws-side-label{display:none}
+}
+/* 回退态：卡片顺序排列（高度自适应，内容不被裁） */
+.works-fallback .ws-card{
+  position:relative !important;
+  inset:auto !important;
+  height:auto;
+  min-height:100vh;
+  min-height:100dvh;
+  overflow:visible;
+}
+.works-fallback .ws-img-wrap{
+  opacity:1 !important;
+  transform:none !important;
+}
+
+/* ============================================================ CASE 覆盖层 */
+#case-overlay{
+  position:fixed;inset:0;z-index:700;
+  background:rgba(10,27,46,.97);
+  opacity:0;pointer-events:none;
+  transform:translateY(24px);
+  transition:opacity .5s var(--ez),transform .5s var(--ez);
+  overflow-y:auto;
+}
+#case-overlay.open{opacity:1;pointer-events:auto;transform:translateY(0)}
+.case-close{
+  position:sticky;top:0;
+  display:flex;align-items:center;justify-content:flex-end;
+  padding:clamp(16px,2.5vh,28px) clamp(24px,5vw,72px);
+  background:rgba(10,27,46,.9);
+  backdrop-filter:blur(12px);
+  z-index:10;
+}
+.case-close-btn{
+  width:40px;height:40px;border-radius:50%;
+  border:1.5px solid rgba(242,247,251,.3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;color:rgba(242,247,251,.6);
+  transition:background .2s,color .2s;
+}
+.case-close-btn:hover{background:rgba(242,247,251,.1);color:#F2F7FB}
+.case-body{
+  max-width:1100px;margin:0 auto;
+  padding:clamp(24px,4vh,56px) clamp(24px,5vw,72px) clamp(48px,8vh,96px);
+}
+.case-label{
+  font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;
+  color:#3FA0E0;margin-bottom:12px;
+}
+.case-title{
+  font-size:clamp(36px,6vw,88px);font-weight:900;
+  letter-spacing:-.03em;line-height:1.05;
+  color:#F2F7FB;margin-bottom:8px;
+}
+.case-meta{
+  font-size:clamp(12px,1.1vw,15px);color:rgba(187,217,238,.6);
+  letter-spacing:.06em;margin-bottom:clamp(24px,4vw,48px);
+}
+.case-desc{
+  font-size:clamp(14px,1.4vw,18px);color:rgba(187,217,238,.8);
+  line-height:1.85;max-width:680px;
+  margin-bottom:clamp(32px,5vw,64px);
+}
+.case-imgs{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:clamp(12px,2vw,24px);
+}
+.case-imgs img{
+  width:100%;border-radius:8px;object-fit:cover;
+  border:1px solid rgba(187,217,238,.15);
+  display:block;
+}
+.case-imgs img:first-child{grid-column:1/-1;aspect-ratio:16/9}
+.case-imgs img:not(:first-child){aspect-ratio:4/3}
+@media(max-width:767px){
+  .case-imgs{grid-template-columns:1fr}
+  .case-imgs img:first-child{grid-column:auto}
+}
+
+/* ============================================================ CAPABILITY */
+#capability{background:#EAF3FB;position:relative}
+#capability::before{
+  content:'';position:absolute;inset:0;
+  background-image:linear-gradient(rgba(187,217,238,.4) 1px,transparent 1px),linear-gradient(90deg,rgba(187,217,238,.4) 1px,transparent 1px);
+  background-size:80px 80px;opacity:.4;pointer-events:none;
+}
+.cap-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1px;background:rgba(187,217,238,.5);
+  border:1px solid rgba(187,217,238,.5);border-radius:8px;overflow:hidden;
+  position:relative;z-index:1;
+  margin-top:clamp(32px,5vw,64px);
+}
+.cap-item{
+  background:#EAF3FB;
+  padding:clamp(24px,3.5vw,48px) clamp(20px,3vw,40px);
+}
+.cap-num{font-size:11px;font-weight:600;letter-spacing:.2em;color:#3FA0E0;margin-bottom:10px}
+.cap-name{font-size:clamp(16px,1.8vw,24px);font-weight:700;color:#0A1B2E;margin-bottom:3px}
+.cap-en{font-size:clamp(11px,1vw,14px);font-weight:500;letter-spacing:.06em;color:#3FA0E0}
+@media(max-width:767px){.cap-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.cap-grid{grid-template-columns:1fr}}
+
+/* ============================================================ CONTACT */
+#contact{background:#0A1B2E;padding:clamp(80px,12vw,160px) clamp(24px,6vw,96px)}
+.contact-inner{max-width:1320px;margin:0 auto}
+.contact-title{
+  font-size:clamp(32px,5.5vw,80px);font-weight:900;
+  letter-spacing:-.025em;line-height:1.15;
+  color:#F2F7FB;margin-bottom:clamp(16px,2.5vw,32px);
+}
+.contact-scope{
+  font-size:clamp(13px,1.2vw,16px);color:rgba(242,247,251,.5);
+  margin-bottom:clamp(24px,4vw,48px);line-height:1.8;
+}
+.contact-types{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:clamp(32px,5vw,64px)}
+.contact-type{
+  font-size:12px;font-weight:500;letter-spacing:.08em;
+  color:rgba(242,247,251,.65);
+  border:1px solid rgba(242,247,251,.18);
+  padding:6px 16px;border-radius:20px;
+  transition:background .2s,color .2s;cursor:pointer;
+}
+.contact-type:hover,.contact-type.active{
+  background:rgba(242,247,251,.1);color:#F2F7FB;border-color:rgba(242,247,251,.4);
+}
+.contact-info{
+  border-top:1px solid rgba(242,247,251,.1);
+  padding-top:clamp(24px,4vw,48px);
+  display:flex;flex-direction:column;gap:16px;
+}
+.contact-row{display:flex;align-items:center;gap:24px}
+.contact-key{
+  font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(242,247,251,.3);width:80px;flex-shrink:0;
+}
+.contact-val{
+  font-size:clamp(14px,1.4vw,20px);font-weight:500;
+  color:#F2F7FB;transition:color .2s;
+}
+.contact-val:hover{color:#3FA0E0}
+.contact-footer{
+  margin-top:clamp(48px,8vw,96px);
+  display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px;
+}
+.contact-big{
+  font-size:clamp(48px,10vw,140px);font-weight:900;
+  letter-spacing:-.03em;line-height:.9;
+  color:rgba(242,247,251,.07);
+}
+.contact-copy{font-size:12px;color:rgba(242,247,251,.22);letter-spacing:.08em}
+
+/* ============================================================ CASE 覆盖层（保留，无改动） */
+
+/* ============================================================ 全站板块「推走」PANEL PUSH
+   机制（逐帧实测复刻参考视频）：
+     · 进入的板块：平推上来，前缘水平（参考实测：y 值全宽恒定，1px 内）
+     · 离场的板块：整块被「转」着送走 —— 真 transform（旋转 + 右移），
+       所以文字跟着歪、左缘内缩露出页面底色
+       （参考实测：上边缘斜率 2.5% ≈ 1.43°，左缘内缩 ≈78px）
+   序列：hero → about → [作品区：由 GSAP 3D 堆叠单独接管，不参与推走] → capability → contact
+   可调参数：TILT 最大旋转角 / SHIFT 最大右移量 / DIM 压暗上限，都在 JS 参数表
+   ============================================================ */
+#hero,#about,#capability,#contact{
+  position:sticky;top:0;
+  height:100vh;height:100dvh;
+  min-height:0;max-height:none;
+  overflow:hidden;
+  transform-origin:50% 100%;
+  will-change:transform;
+}
+
+/* 板块内容：垂直居中并压缩上下留白，保证内容进一屏 */
+#about>.sec,#capability>.sec{
+  width:100%;height:100%;
+  display:flex;align-items:center;
+  padding-top:clamp(40px,6vh,72px);
+  padding-bottom:clamp(40px,6vh,72px);
+}
+#about .about-grid,#capability .sec-inner{width:100%}
+#capability .sec-title-en{margin-bottom:clamp(20px,3.5vh,48px)}
+#capability .cap-grid{margin-top:clamp(16px,3vh,40px)}
+#about .about-img{max-height:52vh}
+#contact{
+  height:100vh;height:100dvh;
+  display:flex;flex-direction:column;justify-content:center;
+  padding-top:clamp(40px,6vh,72px);
+  padding-bottom:clamp(40px,6vh,72px);
+}
+#contact .contact-inner{width:100%}
+
+/* 被顶走板块的压暗层（JS 注入）；DIM=0 时不启用，贴参考 */
+.panel-dim{position:absolute;inset:0;z-index:40;background:#04101C;opacity:0;pointer-events:none}
+
+/* 离场板块「转走」时露出的页面底色（贴参考：深色 hero 也能看见卡片抽离的缝）
+   想换色/去掉，只改这一行即可 */
+body::before{content:'';position:fixed;inset:0;background:#F2F7FB;z-index:-1;pointer-events:none}
+
+/* 窄屏 / 矮屏：关闭推走，回退为常规顺序流（内容不被裁切） */
+@media(max-width:900px),(max-height:680px){
+  #works{height:auto}
+  .works-pin{position:relative;height:auto}
+  .works-stack{height:auto;overflow:visible;perspective:none}
+  #hero,#about,#capability,#contact{
+    position:relative;top:auto;
+    height:auto;min-height:100vh;min-height:100dvh;
+    clip-path:none !important;transform:none !important;overflow:visible;
+  }
+  #hero{height:100vh;height:100dvh}
+  /* 窄屏/矮屏：作品卡回退为顺序排列，高度自适应（内容不被裁） */
+  .ws-card{
+    position:relative;inset:auto;
+    height:auto;min-height:100vh;min-height:100dvh;
+    overflow:visible;
+  }
+  #contact{display:block;height:auto}
+  #contact,#capability>.sec,#about>.sec{
+    padding-top:clamp(72px,10vw,140px);
+    padding-bottom:clamp(72px,10vw,140px);
+  }
+  #about>.sec,#capability>.sec{display:block;height:auto}
+  #about .about-img{max-height:none}
+  .panel-dim{display:none}
+}
+
+/* 推走生效时：内容留白与字阶随视口高度自适应，保证一屏装得下（含真实字体） */
+@media(min-width:901px) and (min-height:681px){
+  /* 卡片内容约束：防止右栏图片固有比例把 grid 行撑高（否则一屏装不下） */
+  .ws-content{grid-template-rows:minmax(0,1fr)}
+  .ws-left,.ws-right,.ws-img-wrap{min-height:0}
+  #about>.sec,#capability>.sec{padding-top:clamp(24px,3.5vh,52px);padding-bottom:clamp(24px,3.5vh,52px)}
+  #contact{padding-top:clamp(24px,3.5vh,52px);padding-bottom:clamp(24px,3.5vh,52px)}
+  .sec-title{font-size:clamp(40px,5.4vw,80px)}
+  .sec-title-en{margin-bottom:clamp(14px,2.4vh,32px)}
+  .cap-grid{margin-top:clamp(12px,2vh,26px)}
+  .cap-item{padding:clamp(16px,2.4vw,32px) clamp(14px,2.2vw,28px)}
+  .ws-content{
+    padding:clamp(28px,4vh,52px) clamp(24px,4vw,64px) clamp(18px,2.6vh,32px);
+    gap:clamp(18px,3vw,40px);
+  }
+  .ws-title{font-size:min(5.2vw,6.2vh);margin-bottom:clamp(10px,1.6vw,18px)}
+  .ws-meta{gap:6px clamp(12px,2vw,24px);margin-bottom:clamp(10px,1.8vh,22px)}
+  .ws-desc{font-size:clamp(12px,1.05vw,15px);line-height:1.7}
+  .ws-img-wrap{margin-top:clamp(8px,1.6vh,18px)}
+  .ws-cta{margin-top:clamp(12px,2vh,24px);padding:clamp(9px,1.2vh,14px) clamp(20px,2.6vw,36px);font-size:clamp(12px,1vw,14px)}
+  .about-name{font-size:clamp(28px,3.6vw,56px)}
+  .about-body{line-height:1.7;font-size:clamp(12px,1.1vw,15px)}
+  .about-tags{margin-top:clamp(10px,1.8vw,20px)}
+  #about .about-img{max-height:46vh}
+  .contact-title{font-size:clamp(28px,4.2vw,60px);margin-bottom:clamp(10px,1.6vw,20px)}
+  .contact-scope{margin-bottom:clamp(14px,2.2vw,28px)}
+  .contact-types{margin-bottom:clamp(18px,2.6vw,36px)}
+  .contact-info{padding-top:clamp(16px,2.6vw,32px);gap:10px}
+  .contact-footer{margin-top:clamp(20px,3.5vw,48px)}
+  .contact-big{font-size:clamp(40px,6.5vw,92px)}
+}
+
+/* ============================================================ SCROLL REVEAL */
+.reveal{
+  opacity:0;transform:translateY(28px);
+  transition:opacity .7s var(--ez),transform .7s var(--ez);
+}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+
+/* ============================================================ SCROLLBAR */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#BBD9EE;border-radius:2px}
+</style>
+</head>
+<body style="background-color: rgb(171, 188, 206);" data-page-node-id="wRdWtZObCWn9kcsGIPBX9Q">
+
+<!-- ============================================================ PRELOADER — 4 竖列同色块，纯 CSS 自上而下擦除，不依赖 JS -->
+<div id="preloader" aria-hidden="true" aria-label="页面加载中" data-lvt-eid="6bd714c1e8" data-page-node-id="EuAvwivk9blyHduXgayXNj">
+  <!-- DA REAL 字标 -->
+  <div id="intro-logo" data-lvt-eid="7bed9def1f" data-page-node-id="ROeCmLBpXdOOvgCBXtMRoW">
+    <span class="pl-brand" data-lvt-eid="3a89d11beb" data-page-node-id="JvSrZb70B1stI4RPTw6WV3">DA REAL</span>
+    <span class="pl-sub" data-lvt-eid="8be96970a1" data-page-node-id="UBEX1Jo30tKVt7TE0cTxE5">BRAND · PACKAGING · POSTER DESIGN</span>
+  </div>
+  <!-- 4 竖列同色块（静态写死在 HTML，纯 CSS 自上而下擦除） -->
+  <div class="stripe s1" aria-hidden="true" data-page-node-id="smRaf5EDHZ6BsWqsebQ9FB"></div>
+  <div class="stripe s2" aria-hidden="true" data-page-node-id="BSCXPmFzHhqr6UdYEqZtEf"></div>
+  <div class="stripe s3" aria-hidden="true" data-page-node-id="SXzan8Qs0AZS2PKUFQ4TED"></div>
+  <div class="stripe s4" aria-hidden="true" data-page-node-id="DJBD2HzXAwgE1sho9kDUEg"></div>
+</div>
+
+<!-- ============================================================ NAV -->
+<div id="nav-wrap" data-lvt-eid="257c683c0e" data-page-node-id="7zqDxhxm2EU703MPcrO816">
+  <nav class="nav-pill" id="nav-pill" role="navigation" aria-label="主导航" data-lvt-eid="15811841e6" data-page-node-id="CygYy78hQJfluor2FVjlDk">
+    <div class="nav-highlight" id="nav-hl" data-lvt-eid="89237451ae" data-page-node-id="5bG0WRrGz1DS4vQ0qTLguE"></div>
+    <div class="nav-item nav-main active" data-target="#hero" tabindex="0" role="button" aria-label="Main" data-lvt-eid="a3376451b9" data-page-node-id="ElxyJeYyXquxiXhwd8FGdn">Main</div>
+    <div class="nav-item" data-target="#about" tabindex="0" role="button" aria-label="Platform" data-lvt-eid="9e18c5456e" data-page-node-id="5zXYMkP4PgG6j4eSOVu1hw">Platform</div>
+    <div class="nav-item" data-target="#works" tabindex="0" role="button" aria-label="Use" data-lvt-eid="0b586f92b4" data-page-node-id="9KejWFu8YjO94z7gL7YCRq">Use</div>
+    <div class="nav-item" data-target="#works" tabindex="0" role="button" aria-label="Cases" data-lvt-eid="4946e91b85" data-page-node-id="lo8RA2QcEqhDzosafQltpW">Cases</div>
+    <div class="nav-item" data-target="#capability" tabindex="0" role="button" aria-label="Integrations" data-lvt-eid="f97d85dd25" data-page-node-id="499Sy2qt5iCEWe7IXzLSd5">Integrations</div>
+    <div class="nav-item" data-target="#contact" tabindex="0" role="button" aria-label="Journal" data-lvt-eid="0e6f4684c4" data-page-node-id="mqjNE04b0aJdqILL8EmwOL">Journal</div>
+    <div class="nav-item" data-target="#contact" tabindex="0" role="button" aria-label="Contact" data-lvt-eid="015ff4fbf4" data-page-node-id="77fnHuvDR9rGPvAUt8NGFF">Contact</div>
+  </nav>
+  <button class="nav-menu-pill" id="menu-btn" aria-label="打开菜单" aria-expanded="false" data-lvt-eid="34bfe40cfc" data-page-node-id="ysgVlddUanYF7cO1pZ8Gzj">menu</button>
+</div>
+
+<!-- 移动端菜单 -->
+<div id="mobile-menu" role="dialog" aria-modal="true" aria-label="导航菜单" data-lvt-eid="abd05e8ce8" data-page-node-id="KuSfMWFN4z7he3F4IRP3FV">
+  <button class="mob-close" id="mob-close" aria-label="关闭菜单" data-lvt-eid="351940f448" data-page-node-id="8OrnY4Dtew9h4rAz1vzGNW">✕</button>
+  <a href="#hero" onclick="closeMob()" data-lvt-eid="ca1bf0e5ba" data-page-node-id="6MbHRmgYdFZlvUBoV5Pe16">首页</a>
+  <a href="#works" onclick="closeMob()" data-lvt-eid="4fd273b12c" data-page-node-id="Q4EZ5x3Beshh98LsveVSfC">作品</a>
+  <a href="#about" onclick="closeMob()" data-lvt-eid="508b03b923" data-page-node-id="VaR5UnZGB62bxpS4775G8l">关于</a>
+  <a href="#contact" onclick="closeMob()" data-lvt-eid="f1bd8861b6" data-page-node-id="XO1GafXWxJzOP5VGOyPi0j">联系</a>
+</div>
+
+<!-- ============================================================ HERO -->
+<section id="hero" aria-label="首屏舷窗海景" data-lvt-eid="cb31779014" data-page-node-id="TNMyt79rcLtBk8v1dituM2">
+  <video class="hero-video" src="https://a.lovart.ai/artifacts/generator/JaPqY9Q8KY6hO5Hl.mp4" poster="https://assets-persist.lovart.ai/video_thumbnails/20e40e2fa00ce96e/frame_1.jpg" autoplay="" muted="" loop="" playsinline="" preload="auto" aria-hidden="true" data-lvt-eid="71b1985c74" data-page-node-id="Ooj5ey488X9Jm6WUYLdlGL"></video>
+  <div class="hero-overlay" aria-hidden="true" data-lvt-eid="69aa473371" data-page-node-id="NCvxcTqAltk6IDG3MTaXWJ"></div>
+  <!-- 整屏点击区 -->
+  <div class="hero-click" id="hero-click" aria-label="点击查看封面信息" role="button" tabindex="0" aria-expanded="false" data-lvt-eid="29d40c8ff6" style="transform: translate(-6.69788px, 0px);" data-page-node-id="iuBX59D0rjV5O3HNA0OOZA"></div>
+  <!-- 点击提示 -->
+  <div class="hero-hint" aria-hidden="true" data-lvt-eid="94936e691b" data-page-node-id="EWo1aVfid1uuGQsMoaDVAL">
+    <div class="hero-hint-icon" data-lvt-eid="5476acd1d4" data-page-node-id="HTeNvHKCxHCb9SH7BXhDCP">
+      <svg viewBox="0 0 12 12" data-lvt-eid="0d1dfb7562" data-page-node-id="K1EBGRz5tAMOFZ8BIP8LMj"><polyline points="2,4 6,8 10,4" data-lvt-eid="f7d713edde" data-page-node-id="bFRUlt7FmPD4KJfCkk10Fr"></polyline></svg>
+    </div>
+    <span data-lvt-eid="3142f3a863" data-page-node-id="kpEa0CMEfsFOqFdD1Q5aEv">点击查看</span>
+  </div>
+  <!-- SCROLL -->
+  <div class="hero-scroll" aria-hidden="true" data-lvt-eid="534ea14270" data-page-node-id="B5WbAWHJ0y3Ak5Bl5Rfh4D">
+    <span data-lvt-eid="e3da162a13" data-page-node-id="UDtecEsgmMQDRAqIO8eiMN">SCROLL</span>
+    <div class="hero-scroll-line" data-lvt-eid="8047a444a8" data-page-node-id="GRRUJPvLOOSWMc57ev8uUL"></div>
+  </div>
+</section>
+
+<!-- ============================================================ COVER LAYER（整屏毛玻璃封面） -->
+<div id="cover-layer" role="dialog" aria-modal="true" aria-label="作品集封面信息" data-lvt-eid="844745e088" data-page-node-id="OgSJxCmsE6AK0nj9Q1eOCf">
+  <button class="cover-close" id="cover-close" aria-label="关闭封面" data-lvt-eid="3cadf904f7" data-page-node-id="Rhdti3HeUm9qCcOieiYJab">×</button>
+  <div class="cover-body" data-lvt-eid="feed833a51" data-page-node-id="ErtXbdSUSbUVOlOPZ295FQ">
+    <!-- 顶部行 -->
+    <div class="cover-top-row" data-lvt-eid="7b74ba8672" data-page-node-id="p2xywqrArHzEobEJXzsCee">
+      <!-- 黑色信息卡 -->
+      <div class="cover-black-card" data-lvt-eid="89b868b7a6" data-page-node-id="oBYoALfzL3HgtddwkfhyDC">
+        <div class="cover-card-header" data-lvt-eid="2ae33a7b72" data-page-node-id="4WOoNNrNlTGGgvzpg2UPKY">
+          <div class="cover-card-thanks" data-lvt-eid="521dd09eb1" data-page-node-id="8oPHtMObtuZRHTYaKba9bf">
+            THANK YOU<br data-lvt-eid="f2619105c1" data-page-node-id="2xpDarPaAbopZjMcvwqW3r">FOR WATCHING<br data-lvt-eid="458a95560f" data-page-node-id="FEjVTbTVBWsav7gJfCw3xz">WORK PROJECT<br data-lvt-eid="470d22aa93" data-page-node-id="XU7UZGlkTpGZGK5JzMwRgE">COLLECTION
+          </div>
+          <div class="real-symbol" data-lvt-eid="e67005a348" data-page-node-id="0A56Ipb1BQ8bi7bDSqCgns">
+            <div class="real-symbol-name" data-lvt-eid="b59f8fb813" data-page-node-id="8F9eiqbwclee4CgBoSwVTO">大REAL</div>
+            <div class="real-symbol-mark" data-lvt-eid="b73a724df2" data-page-node-id="oJBsWQpRNVdRmqttv4bVSz">
+              <span class="real-symbol-cross" data-lvt-eid="0f94facae8" data-page-node-id="DDtHXihi6Ixv5ymBf8xG24">✦</span>
+              <span class="real-symbol-text" data-lvt-eid="f9e44eed25" data-page-node-id="prElyJqjkGzF8CeUMINZHl">REAL</span>
+            </div>
+          </div>
+        </div>
+        <div class="cover-card-services" data-lvt-eid="518d4c23e8" data-page-node-id="yGaJFu1yrDxYqvfLvq7kcL">
+          <div class="cover-card-svc" data-lvt-eid="d09a1ca80f" data-page-node-id="pmOwYHgp9A6R8E4pvogdg3">品牌设计 BRAND DESIGN</div>
+          <div class="cover-card-svc" data-lvt-eid="fbcee659de" data-page-node-id="kmV3hHUJrVET4RG9Jfmbn2">包装设计 ● 海报设计 ● 其他设计</div>
+          <div class="cover-card-svc en" data-lvt-eid="e61af861e1" data-page-node-id="9JWC1AME5cT6b58IzidoyQ">PACKAGING DESIGN</div>
+          <div class="cover-card-svc en" data-lvt-eid="9ef73ef165" data-page-node-id="I8RfrX1EnF8U6WV5ezlTbY">POSTER DESIGN</div>
+          <div class="cover-card-svc en" data-lvt-eid="39530350db" data-page-node-id="Ypxr39350ndeD2FnIw2ekm">OTHER DESIGN</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 中部：Portfolio 巨字 -->
+    <div class="cover-mid" data-lvt-eid="86d6b189ab" data-page-node-id="fUOGBgt9nyBq3DMQDqBCV0">
+      <div class="cover-portfolio" data-lvt-eid="01089f34a6" data-page-node-id="3gEYj7I0aCDySkz7VqDX43">Portfolio</div>
+      <div class="cover-percent" data-lvt-eid="b012e29a7b" data-page-node-id="nztgORyiYJFH1FNVd3R8uA">%Design</div>
+    </div>
+
+    <!-- 中文三字行 -->
+    <div class="cover-cn-row" data-lvt-eid="86b88171db" data-page-node-id="6gqhuRXt0QAc1ZFIZ66IFR">
+      <span class="cover-cn-item" data-lvt-eid="872a2a732b" data-page-node-id="qfqaSkBVCkb6aIL32VOg9L">品牌設計</span>
+      <span class="cover-cn-item" data-lvt-eid="d5fb356b96" data-page-node-id="qXCd8BrwDFoPAHQj8TiGed">作品集</span>
+      <span class="cover-cn-item" data-lvt-eid="7af21e2db9" data-page-node-id="ja4iYQ5asKYyFIoOK153d5">©2026</span>
+    </div>
+
+    <!-- 底栏 -->
+    <div class="cover-bottom-row" data-lvt-eid="d0e143e43a" data-page-node-id="CSE5tkekolXCBXiZwRFzJc">
+      <div class="cover-bottom-item" data-lvt-eid="916348c006" data-page-node-id="SvPrn3eaNpJwgdEF8LDXlY">
+        <span class="cover-bottom-key" data-lvt-eid="1b0b3b7a6e" data-page-node-id="lZ4aepX6Iqwo3g0vsDMAac">Contact</span>
+        <a href="tel:18256998160" class="cover-bottom-val" data-lvt-eid="3c31aad67a" data-page-node-id="cGv83Y868k1mTM2N2ttHtt">18256998160</a>
+      </div>
+      <div class="cover-bottom-item" data-lvt-eid="c6aecc492b" data-page-node-id="MAdTH2WiOMfHWWLKHECB1D">
+        <span class="cover-bottom-key" data-lvt-eid="4b816b5eb4" data-page-node-id="CALywE3EuLpxjmEaEcmLyf">WeChat</span>
+        <span class="cover-bottom-val" data-lvt-eid="20307d7716" data-page-node-id="KETZAFtb9yQhkHDHAh9BGz">DdReal_Design</span>
+      </div>
+      <div class="cover-bottom-item" data-lvt-eid="6b185e171a" data-page-node-id="CTaFAmkjDFD2IZ30dNfLqk">
+        <span class="cover-bottom-key" data-lvt-eid="180ae56e18" data-page-node-id="vnM8aDK1lHcwhN2zdLJoIC">Role</span>
+        <span class="cover-bottom-val" data-lvt-eid="1e33c1935f" data-page-node-id="H6nNn4gsceIQ0FmexGVHn7">Brand Designer</span>
+      </div>
+      <div class="cover-bottom-item" data-lvt-eid="cdeb49c657" data-page-node-id="ZAW0L6L3SzCcMLclsKfCdG">
+        <span class="cover-bottom-key" data-lvt-eid="cb304d180c" data-page-node-id="BKpSpMtA64J3a9qZZQ7JLO">Year</span>
+        <span class="cover-bottom-val" data-lvt-eid="55e6cf1951" data-page-node-id="sz7weonGbxgISUTLqVzsjZ">2020—2026</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ MAIN -->
+<main id="main" data-lvt-eid="cc79bb74a3" data-page-node-id="s1EUXw5FTngMlSwb8vcH7j">
+
+  <!-- ABOUT -->
+  <section id="about" data-lvt-eid="422cde7222" data-page-node-id="1IKZ9EO8D7HKn01zaufFy3">
+    <div class="sec" data-lvt-eid="898927d135" data-page-node-id="FKhOPs8tfahS1ubf87cBZ6">
+      <div class="sec-inner" data-lvt-eid="bd057fa93a" data-page-node-id="HgdQJhuVjGBEJEtys3PBaU">
+        <span class="sec-label reveal" data-lvt-eid="0200fa9b71" style="transform: translate(-6.6667px, 1.33334px);" data-page-node-id="3JygdRHhMQM612F6qYJNRj">About / 关于</span>
+        <div class="about-grid" data-lvt-eid="bece845651" data-page-node-id="ZcFgajNEYdHT1CpDqEigPW">
+          <div class="about-img reveal" data-lvt-eid="4095e9306a" data-page-node-id="WdBpZGzd9LpBGzUr50TgM1">
+            <img src="https://assets-persist.lovart.ai/pdf_extracts/ab2fc75504b65e52/images/page2_img1.jpeg" alt="DA REAL 张瑞 品牌设计师" loading="lazy" decoding="async" data-lvt-eid="159cd65bf8" data-page-node-id="9969YO2PtOGjWIKpufBsC3">
+          </div>
+          <div data-lvt-eid="e642521b2e" data-page-node-id="UnYLOt25opBEBl1DqGeEG8">
+            <h2 class="about-name reveal" data-lvt-eid="24120c89e1" style="transform: translate(-7.58594px, -0.83667px);" data-page-node-id="4m1PEEUFNPdteh0FrgDX6R">DA REAL</h2>
+            <p class="about-sub reveal" data-lvt-eid="24ac860133" data-page-node-id="4JgZxVotQKAC8A3qQFXYbI">Brand / Packaging / Poster Designer</p>
+            <p class="about-body reveal" data-lvt-eid="8d46b12709" data-page-node-id="NRM5ABcBuMdyDHsLEADOUi">品牌 · 包装 · 海报设计师，2020 年入行，六年间专注品牌识别、包装系统与商业视觉，服务过快消、宠物、运动、生鲜等多个品类。</p>
+            <p class="about-body reveal" data-lvt-eid="c04bd61b7f" data-page-node-id="fOazgafMPHiuOWH1YyowO1">视觉传达设计专业背景，相信好的设计首先要解决问题。</p>
+            <div class="about-tags reveal" data-lvt-eid="7f994a9781" data-page-node-id="Bix5ZW2M2gMoO9awl4eALt">
+              <span class="about-tag" data-lvt-eid="e3ff4c8cca" data-page-node-id="hZwf8NvYCgAl5y3A8DadQv">品牌设计</span>
+              <span class="about-tag" data-lvt-eid="6c2f130216" data-page-node-id="eVavUVHwYE5ON4LWpZZG81">包装设计</span>
+              <span class="about-tag" data-lvt-eid="5ebbee09d5" data-page-node-id="GVWtqrgHmuLGQA6KR0XExi">商业视觉</span>
+              <span class="about-tag" data-lvt-eid="ae330acc9e" data-page-node-id="MzpSeoDnbsEJCiDFrcZ3l3">视觉系统</span>
+              <span class="about-tag" data-lvt-eid="7ecfb4ba6d" data-page-node-id="Q5vWft0q74RoZfwnGmoyG0">2020—2026</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SELECTED WORKS — GSAP ScrollTrigger 堆叠 3D 卡片 -->
+  <section id="works" data-lvt-eid="07247b6b7d" data-page-node-id="dSiOa9SJ7XA48fByPF82zL">
+    <!-- 章节指示器 -->
+    <div id="works-indicator" aria-live="polite" aria-label="当前作品" data-lvt-eid="856ebe04f3" data-page-node-id="udM7PLcPDMZhaYncpO3f3s">
+      <span class="wi-num" id="wi-num" data-lvt-eid="50d98a759c" data-page-node-id="sCl58VC0UiBRTfnc8BZwSj">01 / 04</span>
+      <div class="wi-bar" data-lvt-eid="ad9ccec04e" data-page-node-id="kk7yjFaiWBmQH55ibDsppD"><div class="wi-bar-fill" id="wi-fill" style="width:25%" data-lvt-eid="d12fd93200" data-page-node-id="DQyCMMCBMphNE3bmIZXpEE"></div></div>
+      <span class="wi-name" id="wi-name" data-lvt-eid="f2631dbd8f" data-page-node-id="U66xeKT8kvR5GUA2talMAQ">Bello</span>
+    </div>
+
+    <!-- pin 外层容器：ScrollTrigger trigger 元素 -->
+    <div class="works-pin" data-lvt-eid="dd663d6b14" data-page-node-id="HuNyAz8XHpt35uG964LbkH">
+      <!-- 占满视口的展示层，pin 期间固定在此 -->
+      <div class="works-stack" id="works-stack" data-lvt-eid="325a5991b4" data-page-node-id="IjLurMVeg6h8GHVVETGA9r">
+
+        <!-- 01 Bello -->
+        <div class="ws-card" data-idx="0" data-case="bello" role="region" aria-label="作各01 Bello 贝拉" data-lvt-eid="ee4f1be106" data-page-node-id="AQViClO9R7xNyFcIBuWRMg">
+          <div class="ws-content" data-lvt-eid="2c25709cb5" data-page-node-id="QqnG9o0j9igF40wQ9MRiWV">
+            <div class="ws-left" data-lvt-eid="233c6ce8c4" data-page-node-id="VUCgrC0cy2LiDBlgeqmsjn">
+              <div data-lvt-eid="212722b437" data-page-node-id="xcHayszt0ZWT2nKyWLRJSi">
+                <div class="ws-title" data-lvt-eid="df005e46b7" data-page-node-id="e3MMSEpjAyZkLj5WkGqV4y">Bello<br data-lvt-eid="042848f483" data-page-node-id="PXs2dOjXfKjccsmRGN3JJb">贝拉</div>
+                <div class="ws-meta" data-lvt-eid="6b342672de" data-page-node-id="e6Ldc2V5Hbces0dRP7Mjr9">
+                  <div class="ws-meta-item" data-lvt-eid="850cd8926b" data-page-node-id="jZwBAsPrDc0zoGewKIZKDv"><span class="ws-meta-key" data-lvt-eid="00274f209f" data-page-node-id="jXrKmLmVUG3LeHGfCiSpMp">Category</span><span class="ws-meta-val" data-lvt-eid="38bef4ab9d" data-page-node-id="cLiT8BYonQrfTjn4pMg9JZ">BRAND / PACKAGING</span></div>
+                  <div class="ws-meta-item" data-lvt-eid="bbc709f971" data-page-node-id="4NMUUuY6W1bbxpDFtGM7wK"><span class="ws-meta-key" data-lvt-eid="c158d1ba65" data-page-node-id="jW9vutlAnSW8Tt7KzEBvHH">Year</span><span class="ws-meta-val" data-lvt-eid="2d6c330e2e" data-page-node-id="qrGN205tedX4HRungGBdzf">2025</span></div>
+                  <div class="ws-meta-item" data-lvt-eid="e5016af511" data-page-node-id="Re1CmV5ypg1r61Q8cJ9j30"><span class="ws-meta-key" data-lvt-eid="b31c47634a" data-page-node-id="aie6HVoqQDC0SNtTJUrWbp">Type</span><span class="ws-meta-val" data-lvt-eid="f7dbae25f9" data-page-node-id="BoqMa5ehMDP4zKwLNyQJTc">婴幼儿辅食</span></div>
+                  <div class="ws-meta-item" data-lvt-eid="ac8d8d924c" data-page-node-id="VHDSjfi0qJdD3JD2cJDqH9"><span class="ws-meta-key" data-lvt-eid="855154f7f5" data-page-node-id="8YzomEOPHZ08pmwaKrUEOH">Role</span><span class="ws-meta-val" data-lvt-eid="21d51b99b9" data-page-node-id="Hkg5L0lN0f2i8FzVzL5S7u">Brand Designer</span></div>
+                </div>
+                <p class="ws-desc" data-lvt-eid="a45dc104ef" data-page-node-id="IbQ7vXAZjBSLBK4cDclxZu">全案品牌、包装、餐具与传播物料，温和安全的亲子视觉语言，从 Logo 到系列包装完整落地。</p>
+              </div>
+              <button class="ws-cta" onclick="openCase('bello')" aria-label="查看 Bello 项目详情" data-lvt-eid="75b06ab9df" data-page-node-id="efW6PhOvpldqaUlnEG1qFL">View case</button>
+            </div>
+            <div class="ws-right" data-lvt-eid="65c4693b88" data-page-node-id="sRTYc0uGFruhdnRCgpLtEt">
+              <div class="ws-num" aria-hidden="true" data-lvt-eid="366f95ba07" data-page-node-id="SBQE7t6VzkNHZGmePRRAcO">01</div>
+              <div class="ws-side-label" aria-hidden="true" data-lvt-eid="d8de478834" data-page-node-id="h4rioml4ygJW0Bk9xDTYIW">DA REAL / Selected Work</div>
+              <div class="ws-img-wrap" data-lvt-eid="f04b426f8b" data-page-node-id="i0vvOUbD9GGUeccDnqWiRA">
+                <img src="https://assets-persist.lovart.ai/pdf_extracts/ab2fc75504b65e52/images/page3_img3.jpeg" alt="Bello 贝拉婴幼儿辅食品牌封面" loading="eager" decoding="async" data-lvt-eid="09c2ded57c" data-page-node-id="Squ4bWXMHjPtQzhAfMsVka">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 02 FORM UND -->
+        <div class="ws-card" data-idx="1" data-case="formund" role="region" aria-label="作各02 FORM UND" data-lvt-eid="e73b8d43a8" data-page-node-id="VQ9ZT8PHLAJX3PkE2chsfx">
+          <div class="ws-content" data-lvt-eid="258917ad22" data-page-node-id="HWgKDB22DplVCzFCsZO30j">
+            <div class="ws-left" data-lvt-eid="cc0bddb977" data-page-node-id="AmhiwFZLwRdRs0A3yt9WvZ">
+              <div data-lvt-eid="b42f957beb" data-page-node-id="NXtQglTDM6e8MKCc8TDAxT">
+                <div class="ws-title" data-lvt-eid="a749dd59ad" data-page-node-id="yPrla43mA5f2uJROcJWcik">FORM<br data-lvt-eid="551bc4c598" data-page-node-id="C3RT0dqroswhhSuqssArq4">UND</div>
+                <div class="ws-meta" data-lvt-eid="34269fa864" data-page-node-id="ALN7KJklB0dC7hLdd5J7Hb">
+                  <div class="ws-meta-item" data-lvt-eid="2352b54f44" data-page-node-id="z7kXb4k7YPR99RFkrcGUww"><span class="ws-meta-key" data-lvt-eid="dc647d9733" data-page-node-id="kZMdrPqsvuFFBX2W2AgNCN">Category</span><span class="ws-meta-val" data-lvt-eid="c811656d6f" data-page-node-id="3LDkpRiDDBAwRzPDCmTmKH">BRAND IDENTITY</span></div>
+                  <div class="ws-meta-item" data-lvt-eid="d6428e4a60" data-page-node-id="6VQEZKBVUTANUt9jvfcpqE"><span class="ws-meta-key" data-lvt-eid="493f034b95" data-page-node-id="8jXjhCe6PwvfA0aII7LOaJ">Year</span><span class="ws-meta-val" data-lvt-eid="dd3e573adc" data-page-node-id="R1VIn12LvINdc4HqgIKU7Y">2025</span></div>
+                  <div class="ws-meta-item" data-lvt-eid="0ee89c8f36" data-page-node-id="MHtNGgThp9hQ2fqD2hKjAg"><span class="ws-meta-key" data-lvt-eid="a1a9f41648" data-page-node-id="Ts8IQtsp1CsT9ERGcvTs4L">Type</span><span class="ws-meta-val" data-lvt-eid="34db4161c8" data-page-node-id="MJl09RCbjQTet76FEuDnpC">宠物服饰</span></div>
+                  <div class="ws-meta-item" data-lvt-eid="e176ed314e" data-page-node-id="1l61xYsvnQwDA3b113yixw"><span class="ws-meta-key" data-lvt-eid="a98947bb77" data-page-node-id="rboqdsyaTk2bLGqDwgoWPF">Role</span><span class="ws-meta-val" data-lvt-eid="fcafa03d7b" data-page-node-id="g12sexzmAkHAZ4dcmrVhnC">Brand Designer</span></div>
+                </div>
+                <p class="ws-desc" data-lvt-eid="9ac76df655" data-page-node-id="EczHl6LWefDU51ZWS2T51Z">深棕黑白高端系统，三联圆符号与完整物料矩阵，为宠物服饰品牌建立克制而有辨识度的视觉语言。</p>
+              </div>
+              <button class="ws-cta" onclick="openCase('formund')" aria-label="查看 FORM UND 项目详情" data-lvt-eid="2ee9ee724f" data-page-node-id="JHeukEawoauRoLANnHa3MM">View case</button>
+            </div>
+            <div class="ws-right" data-lvt-eid="8c468e8269" data-page-node-id="GVYl1hrKfGGjpIG5gEajMm">
+              <div class="ws-num" aria-hidden="true" data-lvt-eid="a4628cac6f" data-page-node-id="0vHsC2cHvWVFEwVmrbqElN">02</div>
+              <div class="ws-side-label" aria-hidden="true" data-lvt-eid="7dd440a0d1" data-page-node-id="z0oajjdBA5Y5N3MwtHM3CP">DA REAL / Selected Work</div>
+              <div class="ws-img-wrap" data-lvt-eid="832e1a69f3" data-page-node-id="Ao6mUdP3jslDV0Akk77cdI">
+                <img src="https://assets-persist.lovart.ai/pdf_extracts/ab2fc75504b65e52/images/page16_img15.jpeg" alt="FORM UND 宠物服饰品牌" loading="lazy" decoding="async" data-lvt-eid="f9eff1a827" data-page-node-id="9wdREVIuTsyELJRuw3VN1q">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 03 Wilson -->
+        <div class="ws-card" data-idx="2" data-case="wilson" role="region" aria-label="作各03 Wilson 小奖赛" data-lvt-eid="3e757bc5ad" data-page-node-id="IHZqY6SpZ1rALqhxGQtvjt">
+          <div class="ws-content" data-lvt-eid="371189249d" data-page-node-id="vs4MkFcpp6Gk37lCilsyTp">
+            <div class="ws-left" data-lvt-eid="0711d474da" data-page-node-id="ofOlLHzDacJfyAzN6NF4XZ">
+              <div data-lvt-eid="6486e2fdc8" data-page-node-id="FZdvbn9C7rUjNkNdbS6zhP">
+                <div class="ws-title" data-lvt-eid="92553483d8" data-page-node-id="BNORzgNVHofs8KrWLPm7fL">Wilson<br data-lvt-eid="82d5956318" data-page-node-id="p2EjT9lMH0paXwgyrBtm2R">小奖赛</div>
+                <div class="ws-meta" data-lvt-eid="bf6c016b03" data-page-node-id="AqKFf9o6RDoGGDI3gekD0t">
+                  <div class="ws-meta-item" data-lvt-eid="fcd77758d7" data-page-node-id="uwUd6oClOQg5VXZzsjZCLU"><span class="ws-meta-key" data-lvt-eid="70b18823d4" data-page-node-id="kklwaGmVTjI61rUTme1NQJ">Category</span><span class="ws-meta-val" data-lvt-eid="d3e1fa8f68" data-page-node-id="HoPWzfXduOq9VhbEKbgOgD">CAMPAIGN / VISUAL</span></div>
+                  <div class="ws-meta-item" data-lvt-eid="94752a0517" data-page-node-id="DRbHmQKrXib4RakXuTxg9j"><span class="ws-meta-key" data-lvt-eid="2200bf7e31" data-page-node-id="d1iYCTSyiQ01DAFjQcie0w">Year</span><span class="ws-meta-val" data-lvt-eid="53c921a13f" data-page-node-id="wXfYWcMAWiNpnH7WpptkXP">2025</span></div>
+                  <div class="ws-meta-item" data-lvt-eid="d2b070029a" data-page-node-id="YAXCoP387SihIAZoJsrhac"><span class="ws-meta-key" data-lvt-eid="b64202d443" data-page-node-id="smvTEYjOIJANxaR1O9nUpF">Type</span><span class="ws-meta-val" data-lvt-eid="05e8a6df0c" data-page-node-id="7bAZitNv9gvDgj0D9orEEO">网球赛事</span></div>
+                  <div class="ws-meta-item" data-lvt-eid="d702cad121" data-page-node-id="wFQalPVX3KeeTlaktDn7bP"><span class="ws-meta-key" data-lvt-eid="f4d4e3c52f" data-page-node-id="CT9Hy4ttl9lhOZ8n8Rtoev">Role</span><span class="ws-meta-val" data-lvt-eid="46c6cfcf9e" data-page-node-id="MqF20OW0Zq5QCKYQkYCcn0">Visual Designer</span></div>
+                </div>
+                <p class="ws-desc" data-lvt-eid="e4e9acdc33" data-page-node-id="3ZcW98bm4YTv4PQpW5lAt1">模块化蓝色主视觉延展到 Billboard、道旗与现场落地，完整的赛事品牌体验。</p>
+              </div>
+              <button class="ws-cta" onclick="openCase('wilson')" aria-label="查看 Wilson 项目详情" data-lvt-eid="85d0b55af3" data-page-node-id="vda4FCkuI6uh0OuUqMZtR8">View case</button>
+            </div>
+            <div class="ws-right" data-lvt-eid="bf0965f4f9" data-page-node-id="wcRLTOnZAHYc5fgdXELR7y">
+              <div class="ws-num" aria-hidden="true" data-lvt-eid="c3210856c3" data-page-node-id="3dY6dnmUeXfRbIaDqOBbTd">03</div>
+              <div class="ws-side-label" aria-hidden="true" data-lvt-eid="9a246fa53f" data-page-node-id="ni6mFXwfQ7jaRxa0JHXe6F">DA REAL / Selected Work</div>
+              <div class="ws-img-wrap" data-lvt-eid="dde7c01d61" data-page-node-id="p2ZCpwqFgWE6A25lEjkYYw">
+                <img src="https://assets-persist.lovart.ai/pdf_extracts/ab2fc75504b65e52/images/page27_img26.jpeg" alt="Wilson 小奖赛赛事视觉" loading="lazy" decoding="async" data-lvt-eid="52786f9dbd" data-page-node-id="xlgQl6liBfpeF1v44O8WBk">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 04 东方冷链 -->
+        <div class="ws-card" data-idx="3" data-case="dongfang" role="region" aria-label="作各04 东方冷链" data-lvt-eid="252d8cf878" data-page-node-id="mStMSmAukyvLSqkOeXEyON">
+          <div class="ws-content" data-lvt-eid="7c2c8474d9" data-page-node-id="x22E8TbzaVV0l70KI2GCFs">
+            <div class="ws-left" data-lvt-eid="52e2da2541" data-page-node-id="foElkz3gACWsVg8sYQROFu">
+              <div data-lvt-eid="730f742acf" data-page-node-id="GSGlJoIc3bAIolB7fZp2Gs">
+                <div class="ws-title" data-lvt-eid="cd79c2bb91" data-page-node-id="jaWeeufEBB0wgrFbVuAahB">东方<br data-lvt-eid="a8913b5468" data-page-node-id="2ZC1GdONRITLrOe0Jm4oEV">冷链</div>
+                <div class="ws-meta" data-lvt-eid="91b2a634fe" data-page-node-id="DBchxgMyfuP0twk0ujmVQ8">
+                  <div class="ws-meta-item" data-lvt-eid="ecf1e713da" data-page-node-id="eeD0M4Br8GwtG6jbhUfg9p"><span class="ws-meta-key" data-lvt-eid="2f2d23df75" data-page-node-id="KTXP2C3hKSuP3RerjNtySa">Category</span><span class="ws-meta-val" data-lvt-eid="a0c21d7137" data-page-node-id="zxn6CW5a9eAY05RfLPESu0">PACKAGING</span></div>
+                  <div class="ws-meta-item" data-lvt-eid="82a6ad79f2" data-page-node-id="fZvzO61qAZBlhBUiKTDpeG"><span class="ws-meta-key" data-lvt-eid="fbd1be4351" data-page-node-id="9E4GRVT5IghNUR4yFxMPsb">Year</span><span class="ws-meta-val" data-lvt-eid="871d099713" data-page-node-id="w1X443k1mM2Z1xuxZ6WGyU">2025</span></div>
+                  <div class="ws-meta-item" data-lvt-eid="491f664f8c" data-page-node-id="YO2BvUudfuPSGkxmDnIE2l"><span class="ws-meta-key" data-lvt-eid="758e49e759" data-page-node-id="7LIswFP97yKx9LPw0UGb82">Type</span><span class="ws-meta-val" data-lvt-eid="ad2f1c0b9d" data-page-node-id="WwDfiQnnCN5HFpTHeNFgmG">高端生鲜</span></div>
+                  <div class="ws-meta-item" data-lvt-eid="876bd3f819" data-page-node-id="BecupsH7LXcY7mHo1YQ4Bv"><span class="ws-meta-key" data-lvt-eid="05b119c279" data-page-node-id="wGNsOpeqgJQ8JVAcrW3wCF">Role</span><span class="ws-meta-val" data-lvt-eid="d79f11a899" data-page-node-id="tkt52Dk2iwkf6h63mrLiIM">Packaging Designer</span></div>
+                </div>
+                <p class="ws-desc" data-lvt-eid="75b4e03f76" data-page-node-id="pjTxN2hFbykfYmeoomiqLN">蓝黑双色与金色航空徽章纹样，庄重高级的高端生鲜礼盒包装系统。</p>
+              </div>
+              <button class="ws-cta" onclick="openCase('dongfang')" aria-label="查看东方冷链项目详情" data-lvt-eid="d9b96ffc2d" data-page-node-id="lY9gFFsf6Lieg2myhheovh">View case</button>
+            </div>
+            <div class="ws-right" data-lvt-eid="7188242f86" data-page-node-id="eIFZxXNmAzcBLnzhrH2LQS">
+              <div class="ws-num" aria-hidden="true" data-lvt-eid="50c24c9196" data-page-node-id="YQLlhroivuaj9Xf23qkAY9">04</div>
+              <div class="ws-side-label" aria-hidden="true" data-lvt-eid="2be21e65ba" data-page-node-id="bunxMASrTxzpsGhjTBFSA8">DA REAL / Selected Work</div>
+              <div class="ws-img-wrap" data-lvt-eid="ae7ef4e117" data-page-node-id="pu4AOlbVegs06UDPzEwldV">
+                <img src="https://assets-persist.lovart.ai/pdf_extracts/ab2fc75504b65e52/images/page37_img42.jpeg" alt="东方冷链高端生鲜礼盒" loading="lazy" decoding="async" data-lvt-eid="6d5bb767e0" data-page-node-id="lbklhcVWpOxgHZgjdcKC0V">
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /works-stack -->
+    </div><!-- /works-pin -->
+  </section>
+
+  <!-- CAPABILITY -->
+  <section id="capability" data-lvt-eid="b49fa74e99" data-page-node-id="bueTm3B0DpWrCCDAPou5q4">
+    <div class="sec" data-lvt-eid="5387e25f05" data-page-node-id="bqw01WSQRtQPIg97kDE0R6">
+      <div class="sec-inner" data-lvt-eid="dd33ef443b" data-page-node-id="jewNrMJMVtuiB54FaGSlxa">
+        <span class="sec-label reveal" data-lvt-eid="5e64b094f7" data-page-node-id="YWPef1SVmBPLiRbpLBnQhl">Services</span>
+        <h2 class="sec-title reveal" data-lvt-eid="c5ad379c04" data-page-node-id="sBQsSAyPQCNEtNTjoKDzFp">能力与服务</h2>
+        <p class="sec-title-en reveal" data-lvt-eid="74c5d34e96" data-page-node-id="27svC7ygZC4LizQjYRofo4">CAPABILITY / SERVICES</p>
+        <div class="cap-grid reveal" data-lvt-eid="e54aee6ed6" data-page-node-id="o571tXGmH0vDRzsnVrl9XU">
+          <div class="cap-item" data-lvt-eid="f0fa7edc9d" data-page-node-id="UEsPrMckrIxKP3MLobEATB"><div class="cap-num" data-lvt-eid="b298620ab8" data-page-node-id="R7TqCYrSXhWqMSasjQlaTO">01</div><div class="cap-name" data-lvt-eid="4ed853027f" data-page-node-id="9nvluPyDhzkolFhF9aDu1n">品牌设计</div><div class="cap-en" data-lvt-eid="a6e63feecb" data-page-node-id="JeDxRvPADquDeZwrlABieE">BRAND DESIGN</div></div>
+          <div class="cap-item" data-lvt-eid="3e82bc3805" data-page-node-id="qCVaHXRxKqqEt9UPqZWH0O"><div class="cap-num" data-lvt-eid="d9d1c1f646" data-page-node-id="YF5u9Mlb6hIczo33thUpow">02</div><div class="cap-name" data-lvt-eid="df41f7965d" data-page-node-id="kBUdUIvHjNMeE2vB9E3cRl">包装设计</div><div class="cap-en" data-lvt-eid="74c7e267c4" data-page-node-id="zFTWssqO6EMPbdFC7egiHX">PACKAGING</div></div>
+          <div class="cap-item" data-lvt-eid="78fa89509c" data-page-node-id="bvQrdayS90TOahDTCUNBgS"><div class="cap-num" data-lvt-eid="f688efe19f" data-page-node-id="RpOS0IXKspWx1LkFNXYADb">03</div><div class="cap-name" data-lvt-eid="73f49fe638" data-page-node-id="WFBaGEODXfGlVRQTw0S1qz">海报设计</div><div class="cap-en" data-lvt-eid="1722832a78" data-page-node-id="Mj8lA4SqLThpcEunEKbkE0">POSTER DESIGN</div></div>
+          <div class="cap-item" data-lvt-eid="84439c667c" data-page-node-id="ZclAFFF2yEhiJq5GWzvU4k"><div class="cap-num" data-lvt-eid="f1e49ad29d" data-page-node-id="dVJqOjAjEMqw07XFtyIBCq">04</div><div class="cap-name" data-lvt-eid="bbace7c620" data-page-node-id="MCPIdAUYKU4c7c5mJ7nZu7">视觉系统</div><div class="cap-en" data-lvt-eid="51bba9ea79" data-page-node-id="2hBZFvgNB4WdFMjqDhZN2H">VISUAL IDENTITY</div></div>
+          <div class="cap-item" data-lvt-eid="910c950751" data-page-node-id="pAkvUyOrkSdrS7sp95kSIM"><div class="cap-num" data-lvt-eid="0c7199c93b" data-page-node-id="GQXFrnLDb7sll58Rcsd0OJ">05</div><div class="cap-name" data-lvt-eid="2336ed03db" data-page-node-id="LfzbC98j2TcoeYCDQev0oE">商业视觉</div><div class="cap-en" data-lvt-eid="d28b683ae1" data-page-node-id="Mi5YHXBJZapKGxKqEjzKLj">CAMPAIGN</div></div>
+          <div class="cap-item" data-lvt-eid="d6977d3530" data-page-node-id="SscV7ZyPYWLnrf0rrMMYGT"><div class="cap-num" data-lvt-eid="a7e540e0ef" data-page-node-id="Ij6LbXDtOfKVkm59ANuy0N">06</div><div class="cap-name" data-lvt-eid="f4484ae5dd" data-page-node-id="LDeOCZu41WkwVAhUC5H8XX">其他设计</div><div class="cap-en" data-lvt-eid="c37c9e65df" data-page-node-id="cKYSXx8eJSbRRTZar7n774">OTHER DESIGN</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- CONTACT -->
+  <section id="contact" data-lvt-eid="b10af7f4ad" data-page-node-id="ksmwPzQQtfjmBpIq7gYjS9">
+    <div class="contact-inner" data-lvt-eid="c915c0679f" data-page-node-id="NeDMcDC1RTtGTXwXMldCms">
+      <h2 class="contact-title reveal" data-lvt-eid="91dfce41fe" data-page-node-id="fk2IZK08e0B0mD6vZ2Ncgs">有一个想做的项目？<br data-lvt-eid="de6d70b3ed" data-page-node-id="XXplYgRrdRZf8UfZgpDcNh">聊聊看。</h2>
+      <p class="contact-scope reveal" data-lvt-eid="5d49ac2a54" data-page-node-id="muAPZ4VN3ZFH4QRpnDevIx">品牌设计 / 包装设计 / 视觉系统 / 商业视觉 / 产品视觉 / 长期设计合作</p>
+      <div class="contact-types reveal" data-lvt-eid="a222693dfc" data-page-node-id="QRanW3OCCdEac41AiVNJkT">
+        <button class="contact-type active" data-lvt-eid="5b70d9444b" data-page-node-id="1zxQKjK6YmUe1sMLJR01JN">Brand Identity</button>
+        <button class="contact-type" data-lvt-eid="182cb67ffa" data-page-node-id="XTfixNxHBN1VL1bFtdAkvb">Packaging</button>
+        <button class="contact-type" data-lvt-eid="129bb54af1" data-page-node-id="g96dUEPYTJSerGYTcOvE26">Visual Identity</button>
+        <button class="contact-type" data-lvt-eid="b70bd09720" data-page-node-id="v6P5DZFyTmlAXwrnM50h9j">Campaign</button>
+        <button class="contact-type" data-lvt-eid="d24937a950" data-page-node-id="NDSNtxqSDSOVxJK2JS82Xh">Other</button>
+      </div>
+      <div class="contact-form reveal" data-lvt-eid="39028b692e" data-page-node-id="CmFIpV1DKtXy7vKlrkHhja">
+      <div class="contact-info reveal" data-lvt-eid="39c12a1580" data-page-node-id="NuMOeynDgye8bdWnZ9LhT6">
+        <div class="contact-row" data-lvt-eid="0c0944c73a" data-page-node-id="ayaJvIqC6HDGeCG4D3Qzzl">
+          <span class="contact-key" data-lvt-eid="67ab740d23" data-page-node-id="MDgC1PU5fOpYAea91hXL0w">Contact</span>
+          <a href="tel:18256998160" class="contact-val" data-lvt-eid="7f63956681" data-page-node-id="3BBKzWvXMHblyiCFP88EoK">18256998160</a>
+        </div>
+        <div class="contact-row" data-lvt-eid="1dee3ab627" data-page-node-id="iWAJOkSkHYWHfjRtz9GQrG">
+          <span class="contact-key" data-lvt-eid="c96ffd975e" data-page-node-id="AwuNJXgYtZV3qdkL5obY69">WeChat</span>
+          <span class="contact-val" data-lvt-eid="274b5a8763" data-page-node-id="VfVQhgmSJsPq3w5uk5gVBs">DdReal_Design</span>
+        </div>
+      </div>
+      <div class="contact-footer" data-lvt-eid="2d26d0f899" data-page-node-id="ViE1fJPHEqv7zP9CjgefRj">
+        <div class="contact-big" aria-hidden="true" data-lvt-eid="753cc9d8d0" data-page-node-id="fSurQfmNO7lSxduwjAuSY4">DA REAL</div>
+        <div class="contact-copy" data-lvt-eid="a764cb5519" data-page-node-id="l7CSgJi8Zi4quxyOdxpqNy">© 2026 DA REAL · 品牌设计师</div>
+      </div>
+    </div>
+  </div></section>
+
+</main>
+
+<!-- ============================================================ CASE OVERLAY -->
+<div id="case-overlay" role="dialog" aria-modal="true" aria-label="项目详情" data-lvt-eid="65b4e1e6ef" data-page-node-id="sDrvGMVSUhQgbwmbDupXIz">
+  <div class="case-close" data-lvt-eid="afb62f1f70" data-page-node-id="56NYqU7WY8qHAeyE8iG0mJ">
+    <button class="case-close-btn" id="case-close-btn" aria-label="关闭项目详情" data-lvt-eid="ceabad8323" data-page-node-id="LL2wJ6dW5q7gEwO4mjWmwZ">×</button>
+  </div>
+  <div class="case-body" id="case-body" data-lvt-eid="04fce8d659" data-page-node-id="h5RokKS6Js997Af3W8bf7t"></div>
+</div>
+
+<!-- ============================================================ PRELOADER SCRIPT
+     JS 仅做控制与 cleanup 保险：色块已静态写死在 HTML，擦除由纯 CSS 驱动 -->
+<script>
+(function(){
+  'use strict';
+
+  var pl      = document.getElementById('preloader');
+  var cleaned = false;
+  var hardTimer, outTimer, doneTimer, loadTimer;
+
+  /* ---- cleanup：彻底移除 #preloader，恢复页面 ---- */
+  function cleanup(){
+    if(cleaned) return;
+    cleaned = true;
+    [hardTimer, outTimer, doneTimer, loadTimer].forEach(function(t){ if(t) clearTimeout(t); });
+    if(pl){ pl.style.display = 'none'; }
+    document.body.style.overflow = '';
+    document.documentElement.style.overflow = '';
+    var nav  = document.getElementById('nav-wrap');
+    var hint = document.querySelector('#hero .hero-hint');
+    var scrl = document.querySelector('#hero .hero-scroll');
+    var lines = document.querySelectorAll('#hero .hero-title-line');
+    if(nav)  nav.classList.add('pl-in');
+    if(hint) hint.classList.add('pl-in');
+    if(scrl) scrl.classList.add('pl-in');
+    lines.forEach(function(l){ l.classList.add('pl-in'); });
+  }
+
+  try{
+    if(!pl){ return; }
+
+    /* reduced-motion：直接跳过 */
+    if(window.matchMedia('(prefers-reduced-motion:reduce)').matches){
+      cleanup(); return;
+    }
+
+    /* JS 接管：取消 CSS 兜底动画，由 JS 全权控制 */
+    pl.classList.add('js-driven');
+    document.body.style.overflow = 'hidden';
+
+    /* 1.5s 后开始自上而下擦除（加 .out 触发纯 CSS wipe-top） */
+    outTimer = setTimeout(function(){ if(!cleaned) pl.classList.add('out'); }, 1500);
+
+    /* 擦除结束（1.5 + 0.5 + 0.18 + 余量）后收尾 */
+    doneTimer = setTimeout(function(){ if(!cleaned) cleanup(); }, 2250);
+
+    /* 硬上限兜底：3200ms 后必然 cleanup */
+    hardTimer = setTimeout(cleanup, 3200);
+
+    /* window load 后 1800ms 再次保险 */
+    window.addEventListener('load', function(){
+      loadTimer = setTimeout(function(){ if(!cleaned) cleanup(); }, 1800);
+    });
+
+  }catch(e){
+    cleanup();
+  }
+
+})();
+</script>
+
+<!-- ============================================================ JS -->
+<script>
+/* ================================================================
+   业务逻辑：Case 覆盖层 / 封面层 / Scroll Reveal / GSAP Works
+   ================================================================ */
+
+(function(){
+'use strict';
+
+/* ---- Case 数据 ---- */
+var CASES = {
+  bello:{
+    num:'01',name:'Bello 贝拉',year:'2025',
+    cat:'品牌 & 包装设计 · 婴幼儿辅食',
+    desc:'全案品牌、包装、餐具与传播物料，温和安全的亲子视觉语言，从 Logo 到系列包装完整落地。',
+    imgs:[
+      'https://assets-persist.lovart.ai/pdf_extracts/ab2fc75504b65e52/images/page3_img3.jpeg',
+      'https://assets-persist.lovart.ai/pdf_extracts/ab2fc75504b65e52/images/page4_img4.jpeg',
+      'https://assets-persist.lovart.ai/pdf_extracts/ab2fc75504b65e52/images/page14_img13.jpeg'
+    ]
+  },
+  formund:{
+    num:'02',name:'FORM UND',year:'2025',
+    cat:'品牌设计 · 宠物服饰',
+    desc:'深棕黑白高端系统，三联圆符号与完整物料矩阵，为宠物服饰品牌建立克制而有辨识度的视觉语言。',
+    imgs:[
+      'https://assets-persist.lovart.ai/pdf_extracts/ab2fc75504b65e52/images/page16_img15.jpeg',
+      'https://assets-persist.lovart.ai/pdf_extracts/ab2fc75504b65e52/images/page17_img16.jpeg'
+    ]
+  },
+  wilson:{
+    num:'03',name:'Wilson 我的，我的小奖赛',year:'2025',
+    cat:'赛事品牌 & 活动视觉 · 网球',
+    desc:'模块化蓝色主视觉延展到 Billboard、道旗与现场落地，完整的赛事品牌体验。',
+    imgs:[
+      'https://assets-persist.lovart.ai/pdf_extracts/ab2fc75504b65e52/images/page27_img26.jpeg',
+      'https://assets-persist.lovart.ai/pdf_extracts/ab2fc75504b65e52/images/page34_img33.jpeg',
+      'https://assets-persist.lovart.ai/pdf_extracts/ab2fc75504b65e52/images/page37_img37.jpeg'
+    ]
+  },
+  dongfang:{
+    num:'04',name:'东方冷链',year:'2025',
+    cat:'包装设计 · 高端生鲜礼盒',
+    desc:'蓝黑双色 + 金色航空徽章纹样，庄重高级的高端生鲜礼盒包装系统。',
+    imgs:[
+      'https://assets-persist.lovart.ai/pdf_extracts/ab2fc75504b65e52/images/page37_img42.jpeg'
+    ]
+  }
+};
+
+/* ---- 封面层 ---- */
+var coverLayer = document.getElementById('cover-layer');
+var coverClose = document.getElementById('cover-close');
+var heroClick  = document.getElementById('hero-click');
+
+if(heroClick && coverLayer){
+  heroClick.addEventListener('click', function(){
+    coverLayer.classList.add('open');
+    heroClick.setAttribute('aria-expanded','true');
+    document.body.style.overflow = 'hidden';
+  });
+}
+
+if(coverClose){
+  coverClose.addEventListener('click', function(){
+    coverLayer.classList.remove('open');
+    heroClick.setAttribute('aria-expanded','false');
+    document.body.style.overflow = '';
+  });
+}
+
+/* ---- Case 覆盖层 ---- */
+var caseOverlay = document.getElementById('case-overlay');
+var caseBody    = document.getElementById('case-body');
+var caseOpen    = false;
+
+function openCase(id){
+  var c = CASES[id]; if(!c) return;
+  var imgs = c.imgs.map(function(u){ return '<img src="'+u+'" alt="'+c.name+'" loading="lazy" decoding="async">'; }).join('');
+  caseBody.innerHTML =
+    '<div class="case-label">'+c.num+' / CASE STUDY</div>'+
+    '<h2 class="case-title">'+c.name+'</h2>'+
+    '<div class="case-meta">'+c.year+' · '+c.cat+'</div>'+
+    '<p class="case-desc">'+c.desc+'</p>'+
+    '<div class="case-imgs">'+imgs+'</div>';
+  caseOverlay.classList.add('open');
+  caseOpen = true;
+  document.body.style.overflow = 'hidden';
+}
+function closeCase(){
+  caseOverlay.classList.remove('open');
+  caseOpen = false;
+  document.body.style.overflow = '';
+}
+var caseCloseBtn = document.getElementById('case-close-btn');
+if(caseCloseBtn) caseCloseBtn.addEventListener('click', closeCase);
+
+/* ---- 联系类型胶囊 ---- */
+document.querySelectorAll('.contact-type').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    document.querySelectorAll('.contact-type').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+  });
+});
+
+/* ---- Scroll Reveal ---- */
+var revObs = new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if(e.isIntersecting){ e.target.classList.add('in'); revObs.unobserve(e.target); }
+  });
+}, {threshold:.07, rootMargin:'0px 0px -32px 0px'});
+document.querySelectorAll('.reveal').forEach(function(el){ revObs.observe(el); });
+
+})();
+
+/* 全局函数 */
+function closeMob(){
+  document.getElementById('mobile-menu').classList.remove('open');
+  document.getElementById('menu-btn').setAttribute('aria-expanded','false');
+  document.body.style.overflow = '';
+}
+
+/* ================================================================
+   全站板块「推走」PANEL PUSH —— 不依赖 GSAP
+   序列：hero → about → [作品区：交给下方 GSAP 3D 堆叠] → capability → contact
+   机制（逐帧实测复刻参考视频）：
+     · 进入的板块：平推上来，前缘水平（参考实测：y 全宽恒定）
+     · 离场的板块：整块被「转」着送走 —— 真 transform（旋转 + 右移）
+       （参考实测：上边缘斜率 2.5%，左缘内缩 ≈78px）
+   可调参数：
+     TILT   2.0    离场板块最大旋转角（度）
+     SHIFT  145    离场板块最大右移量（px）
+     DIM    0      离场板块压暗上限（0=不压暗，贴参考）
+   ================================================================ */
+(function(){
+  'use strict';
+
+  var TILT  = 2.0;
+  var SHIFT = 145;
+  var DIM   = 0;
+
+  /* 每一步：enter = 用它的顶边算「进入进度」；leave = 被顶走时要「转」出去的那块。
+     作品区特殊：进入进度用 #works 顶边，但离场时不加旋转
+     （#works 高 540vh，转它会撕裂粘性布局；作品区本身已有 3D 翻页） */
+  function q(sel){ return document.querySelector(sel); }
+
+  var steps = [
+    { enter: q('#hero'),       leave: q('#hero') },
+    { enter: q('#about'),      leave: q('#about') },
+    { enter: q('#works'),      leave: null },
+    { enter: q('#capability'), leave: q('#capability') },
+    { enter: q('#contact'),    leave: q('#contact') }
+  ].filter(function(s){ return s.enter; });
+  if(steps.length < 2) return;
+
+  var mobile = window.matchMedia('(max-width:900px), (max-height:680px)');
+  var reduce = window.matchMedia('(prefers-reduced-motion:reduce)');
+
+  /* 压暗层：注入每个「会被顶走」的板块（DIM=0 时不产生效果） */
+  var dims = steps.map(function(s){
+    if(!s.leave) return null;
+    var d = document.createElement('div');
+    d.className = 'panel-dim';
+    d.setAttribute('aria-hidden','true');
+    s.leave.appendChild(d);
+    return d;
+  });
+
+  function vh(){ return window.innerHeight || document.documentElement.clientHeight; }
+  function clear(el){ if(el) el.style.transform = ''; }
+
+  var ticking = false;
+  function render(){
+    ticking = false;
+    var H = vh();
+
+    if(mobile.matches || reduce.matches){
+      steps.forEach(function(s){ clear(s.leave); });
+      dims.forEach(function(d){ if(d) d.style.opacity = '0'; });
+      return;
+    }
+
+    steps.forEach(function(s, i){
+      if(i === 0) return;
+      var prev = steps[i - 1].leave;
+      if(!prev) return;
+      var pr = (H - s.enter.getBoundingClientRect().top) / H;
+      if(pr <= 0){ clear(prev); return; }
+      if(pr > 1) pr = 1;
+      prev.style.transform =
+        'translate3d(' + (SHIFT * pr).toFixed(2) + 'px,0,0) rotate(' +
+        (-TILT * pr).toFixed(3) + 'deg)';
+      if(dims[i - 1]) dims[i - 1].style.opacity = (DIM * pr).toFixed(3);
+    });
+  }
+
+  function onScroll(){ if(!ticking){ ticking = true; requestAnimationFrame(render); } }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', onScroll);
+  window.addEventListener('load', render);
+  render();
+})();
+
+/* ================================================================
+   WORKS — GSAP ScrollTrigger 堆叠 3D 卡片（景深增强 + 干脆化）
+   可调参数（都在下面参数表里）：
+     PERSPECTIVE   700    3D 透视强度（越小越夸张）
+     ROTATE_X      22     新卡入场初始倾斜角（deg）
+     Y_PERCENT     105    从下方滑入距离（%）
+     SCALE_FROM    0.86   新卡初始缩放（"从远处飞来"）
+     SCRUB         1.2    跟随滚动黏滑度
+     END_OFFSET    '+=440%' 总滚动行程（改大=翻得慢）
+     SCALE_PUSHED  0.91   被压卡片缩小量
+     PUSH_TILT     -4     被压卡片后仰角（deg）
+     PUSH_BLUR     1.5    被压卡片模糊（px）
+     PUSH_DIM      0.72   被压卡片亮度
+     ENTER_BLUR    6      新卡入场初始模糊（px）
+   干脆度（渐隐更利落）：
+     REVEAL_RATIO  0.45   入场「模糊→清晰」只占单段的 45%（早清、不拖）
+     PUSH_SETTLE   0.50   退场「缩小+后仰+变暗」在单段前 50% 就锁定
+   ================================================================ */
+(function(){
+  var worksEl = document.getElementById('works');
+  var stack   = document.getElementById('works-stack');
+  var pinEl   = document.querySelector('.works-pin');
+  var cards   = stack ? Array.prototype.slice.call(stack.querySelectorAll('.ws-card')) : [];
+  var wiEl    = document.getElementById('works-indicator');
+  var wiNum   = document.getElementById('wi-num');
+  var wiFill  = document.getElementById('wi-fill');
+  var wiName  = document.getElementById('wi-name');
+  var NAMES   = ['Bello','FORM UND','Wilson','东方冷链'];
+
+  /* ——— 参数表 ——— */
+  var PERSPECTIVE  = 700;
+  var ROTATE_X     = 22;
+  var Y_PERCENT    = 105;
+  var SCALE_FROM   = 0.86;
+  var SCRUB        = 1.2;
+  var END_OFFSET   = '+=440%';
+  var SCALE_PUSHED = 0.91;
+  var PUSH_TILT    = -4;
+  var PUSH_BLUR    = 1.5;
+  var PUSH_DIM     = 0.72;
+  var ENTER_BLUR   = 6;
+  var REVEAL_RATIO = 0.45;
+  var PUSH_SETTLE  = 0.50;
+
+  var CLEAR_FILTER = 'blur(0px) brightness(1)';
+  var DIM_FILTER   = 'blur(' + PUSH_BLUR + 'px) brightness(' + PUSH_DIM + ')';
+  var FAR_FILTER   = 'blur(' + ENTER_BLUR + 'px) brightness(0.7)';
+
+  function updateIndicator(idx){
+    var i = Math.max(0, Math.min(NAMES.length - 1, idx));
+    if(wiNum)  wiNum.textContent  = '0' + (i + 1) + ' / 04';
+    if(wiFill) wiFill.style.width = ((i + 1) / NAMES.length * 100) + '%';
+    if(wiName) wiName.textContent = NAMES[i];
+  }
+
+  var narrow = window.matchMedia('(max-width:900px), (max-height:680px)');
+  var reduce = window.matchMedia('(prefers-reduced-motion:reduce)');
+  var gsapOk = typeof window.gsap !== 'undefined' && typeof window.ScrollTrigger !== 'undefined';
+
+  /* ——— 回退：顺序排列，不裁切 ——— */
+  function fallback(){
+    if(worksEl){
+      worksEl.classList.add('works-fallback');
+      worksEl.style.height = 'auto';
+    }
+    if(pinEl){ pinEl.style.position = 'relative'; pinEl.style.height = 'auto'; }
+    if(stack){
+      stack.style.height = 'auto';
+      stack.style.overflow = 'visible';
+      stack.style.perspective = 'none';
+      stack.style.display = 'block';
+    }
+    cards.forEach(function(c){
+      c.style.setProperty('position','relative','important');
+      c.style.setProperty('inset','auto','important');
+      c.style.height = 'auto';
+      c.style.minHeight = '100vh';
+      c.style.overflow = 'visible';
+      c.style.display = 'flex';
+      c.style.alignItems = 'stretch';
+      c.style.opacity = '1';
+      c.style.visibility = 'visible';
+      c.style.filter = 'none';
+      c.style.transform = 'none';
+      var w = c.querySelector('.ws-img-wrap');
+      if(w){ w.style.opacity = '1'; w.style.transform = 'none'; }
+    });
+    updateIndicator(0);
+    if(wiEl) wiEl.classList.add('vis');
+  }
+
+  if(!gsapOk || reduce.matches || narrow.matches || !stack || !cards.length || !worksEl){
+    fallback(); return;
+  }
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  gsap.set(stack, { perspective: PERSPECTIVE });
+
+  /* 初始化卡片状态：远处的卡「模糊 + 暗 + 倾斜 + 缩小」 */
+  cards.forEach(function(card, i){
+    gsap.set(card, {
+      zIndex: i + 1,
+      autoAlpha: i === 0 ? 1 : 0,
+      rotationX: i === 0 ? 0 : ROTATE_X,
+      yPercent: i === 0 ? 0 : Y_PERCENT,
+      scale: i === 0 ? 1 : SCALE_FROM,
+      transformOrigin: 'center bottom',
+      pointerEvents: i === 0 ? 'auto' : 'none',
+      filter: i === 0 ? CLEAR_FILTER : FAR_FILTER
+    });
+    var imgWrap = card.querySelector('.ws-img-wrap');
+    if(imgWrap) gsap.set(imgWrap, { autoAlpha: i === 0 ? 1 : 0, y: i === 0 ? 0 : 36 });
+  });
+
+  updateIndicator(0);
+
+  /* ——— 主 Timeline（scrub 绑定 #works 的整段行程，不用 pin，
+         由 .works-pin 的 sticky 负责定顶，避免与全站推走机制抢布局） ——— */
+  var tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: worksEl,
+      start: 'top top',
+      end: 'bottom bottom',
+      scrub: SCRUB,
+      invalidateOnRefresh: true,
+      onEnter:     function(){ if(wiEl) wiEl.classList.add('vis'); },
+      onLeave:     function(){ if(wiEl) wiEl.classList.remove('vis'); },
+      onEnterBack: function(){ if(wiEl) wiEl.classList.add('vis'); },
+      onLeaveBack: function(){ if(wiEl) wiEl.classList.remove('vis'); },
+      onUpdate: function(self){
+        var idx = Math.min(NAMES.length - 1, Math.floor(self.progress * NAMES.length));
+        updateIndicator(idx);
+        cards.forEach(function(c, i){ c.style.pointerEvents = (i === idx) ? 'auto' : 'none'; });
+      }
+    }
+  });
+
+  var segLen = 1 / NAMES.length;
+
+  cards.forEach(function(card, i){
+    if(i === 0) return;
+    var imgWrap = card.querySelector('.ws-img-wrap');
+    var pos = (i - 1) * segLen;
+
+    /* ① 清晰化：blur 6px → 0（早开始、早结束 → 干脆，不留糊影） */
+    tl.to(card, {
+      autoAlpha: 1,
+      filter: CLEAR_FILTER,
+      ease: 'power2.out',
+      duration: segLen * REVEAL_RATIO
+    }, pos);
+
+    /* ② 位姿归位：倾斜 22°→平 / 上移 / 缩放 0.86→1（power3 = 强减速，落位果断） */
+    tl.to(card, {
+      rotationX: 0,
+      yPercent: 0,
+      scale: 1,
+      ease: 'power3.out',
+      duration: segLen
+    }, pos);
+
+    if(imgWrap){
+      tl.to(imgWrap, {
+        autoAlpha: 1,
+        y: 0,
+        ease: 'power2.out',
+        duration: segLen * 0.55
+      }, pos + segLen * 0.35);
+    }
+
+    /* ③ 旧卡退到景深后方：缩小 + 后仰 + 变暗变虚（前 50% 就锁定，不再一路漂） */
+    tl.to(cards[i - 1], {
+      scale: SCALE_PUSHED,
+      rotationX: PUSH_TILT,
+      filter: DIM_FILTER,
+      ease: 'power2.out',
+      duration: segLen * PUSH_SETTLE
+    }, pos);
+  });
+
+  ScrollTrigger.refresh();
+
+  /* 跨断点（桌面 ↔ 窄屏）时重载，避免两套布局状态混用 */
+  var bp = window.matchMedia('(max-width:900px), (max-height:680px)');
+  var onBp = function(){ location.reload(); };
+  if(bp.addEventListener) bp.addEventListener('change', onBp); else bp.addListener(onBp);
+})();
+</script>
+
+
+</body></html>
