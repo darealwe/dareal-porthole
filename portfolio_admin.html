@@ -1,0 +1,1650 @@
+<!DOCTYPE html>
+<html data-page-node-id="XxwnJJKsd7qBgRNCBnROrB" lang="zh-CN">
+<head data-page-node-id="4WpGLo9vUnPFMRCLmovv85">
+<script data-page-node-id="wFKJmj3wwX5C6VrIoHEq1d" src="/page/page_comm/inject.js"></script>
+<meta data-page-node-id="VQKk2CpcvBoWNfjU4qUrEV" charset="UTF-8">
+<meta data-page-node-id="VGcAQth1wAbUJ7UpXhhg9B" content="width=device-width, initial-scale=1.0" name="viewport">
+<title data-page-node-id="Dlj8VmgwzbmVza0MqXkJbH" data-pnid-children="2N8ecjJH4VYoDV9pWxNueL">作品集管理后台 · Portfolio Studio</title>
+<!--pnid:PIkLUtrexrKzUPnv83O8dz--><!-- 本工作台通过 WorkBuddy「资料库」skill 搭建、存储和部署 -->
+<!--pnid:7FnePAnT9Y6MEnRlTPcXyX--><!-- 数据表：作品集_站点(R131oaJagutMboMT46eUH4) / 作品集_项目(WVDGlJJNC0P4uezL4zfsOv) / 作品集_图片(OHq8U8lir0HhYsGP0YBKh7) -->
+<!--pnid:e6sryh4gmGZHlqHpsT5mmy--><!-- 仅所有者使用：请勿发布本页，通过协作态链接访问（登录后才有写入权限） -->
+<style data-page-node-id="NOnkWoyLVSXSE4uMvMX10F" data-pnid-children="TMVGTVlQ5IX3W5E6tzfFTR">
+*{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased}
+html,body{height:100%}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",Roboto,sans-serif;
+  background:#EFEFF1;color:#111114;min-width:1080px;
+}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+input,textarea,select{font-family:inherit;outline:none}
+img{display:block}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-thumb{background:#D2D2D7;border-radius:8px}
+::-webkit-scrollbar-track{background:transparent}
+
+/* ---------- 左侧模块栏（对应原网页四大区块） ---------- */
+.rail{
+  position:fixed;left:20px;top:20px;bottom:20px;width:96px;z-index:50;
+  background:#FFFFFF;border-radius:24px;box-shadow:0 2px 14px rgba(10,10,12,.06);
+  display:flex;flex-direction:column;align-items:center;padding:16px 0 14px;gap:8px;
+}
+.rail .logo{
+  width:48px;height:48px;border-radius:15px;background:#111114;color:#fff;
+  display:flex;align-items:center;justify-content:center;margin-bottom:12px;flex:none;
+}
+.rail .logo svg{width:22px;height:22px}
+.rbtn{
+  width:72px;height:62px;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
+  color:#6E6E76;transition:all .18s;flex:none;font-size:11.5px;font-weight:500;
+}
+.rbtn svg{width:21px;height:21px}
+.rbtn:hover{background:#EFEFF1;color:#111114}
+.rbtn.active{background:#3FA0E0;color:#fff}
+.rail .spacer{flex:1}
+
+/* ---------- 主区 ---------- */
+.wrap{margin-left:140px;padding:30px 44px 60px 24px;max-width:1560px}
+.topbar{display:flex;align-items:center;gap:14px;margin-bottom:30px}
+.search{
+  flex:0 0 340px;height:46px;background:#fff;border-radius:23px;display:flex;align-items:center;
+  padding:0 18px;gap:10px;box-shadow:0 2px 10px rgba(10,10,12,.05);
+}
+.search svg{width:17px;height:17px;color:#8A8A92;flex:none}
+.search input{border:none;background:none;flex:1;font-size:15px;color:#111114}
+.search input::placeholder{color:#A0A0A8}
+.topbar .grow{flex:1}
+.chip{
+  height:46px;padding:0 20px;border-radius:23px;background:#fff;display:inline-flex;align-items:center;gap:8px;
+  font-size:14px;color:#111114;box-shadow:0 2px 10px rgba(10,10,12,.05);text-decoration:none;
+}
+.chip svg{width:16px;height:16px}
+.chip.blue{background:#3FA0E0;color:#fff}
+.chip.blue svg{color:#fff}
+
+.page-head{display:flex;align-items:flex-end;gap:18px;margin-bottom:8px}
+.page-title{font-size:40px;font-weight:600;letter-spacing:-.5px}
+.page-title em{font-style:normal;color:#A8A8B0;font-weight:500}
+.page-sub{display:flex;align-items:center;gap:10px;color:#6E6E76;font-size:14px;margin-bottom:26px;flex-wrap:wrap}
+.page-sub .dot{width:5px;height:5px;border-radius:50%;background:#B8B8C0}
+
+.stat-pill{display:inline-flex;align-items:center;gap:8px;background:#fff;border-radius:20px;padding:8px 16px;font-size:13px;color:#55555C;box-shadow:0 2px 8px rgba(10,10,12,.04)}
+.stat-pill b{color:#111114;font-weight:600}
+
+.section-label{font-size:15px;font-weight:600;color:#111114;margin:26px 0 14px;display:flex;align-items:center;gap:10px}
+.section-label .cnt{color:#8A8A92;font-weight:400;font-size:13px}
+
+/* 模块切换 */
+.module{display:none}
+.module.show{display:block}
+
+/* ---------- 分区卡片（作品模块） ---------- */
+.proj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+.pcard{
+  background:#fff;border-radius:22px;padding:14px 14px 16px;box-shadow:0 2px 12px rgba(10,10,12,.05);
+  display:flex;flex-direction:column;gap:12px;transition:box-shadow .2s,transform .2s;
+}
+.pcard:hover{box-shadow:0 8px 26px rgba(10,10,12,.10);transform:translateY(-2px)}
+.cover{
+  position:relative;aspect-ratio:16/9;border-radius:15px;overflow:hidden;
+  background:linear-gradient(135deg,#E6E6E9,#DEDEE2);
+}
+.cover img{width:100%;height:100%;object-fit:cover;object-position:var(--cp,50% 50%)}   /* 16:9 取景，焦点跟图片表「裁剪」字段 */
+.cover .num{
+  position:absolute;left:10px;top:10px;background:rgba(10,10,12,.72);color:#fff;
+  font-size:12px;padding:4px 10px;border-radius:12px;letter-spacing:.5px;backdrop-filter:blur(4px);
+}
+.cover .cnt{
+  position:absolute;right:10px;top:10px;background:rgba(255,255,255,.9);color:#111114;
+  font-size:12px;padding:4px 10px;border-radius:12px;backdrop-filter:blur(4px);
+}
+.pmeta{padding:0 4px}
+.pname{font-size:17px;font-weight:600;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pcat{font-size:13px;color:#6E6E76;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pacts{display:flex;gap:8px;padding:0 4px 2px}
+.btn{
+  height:38px;padding:0 16px;border-radius:19px;font-size:13.5px;font-weight:500;
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;transition:all .16s;flex:1;
+}
+.btn svg{width:15px;height:15px}
+.btn.primary{background:#3FA0E0;color:#fff}
+.btn.primary:hover{background:#232328}
+.btn.ghost{background:#EFEFF1;color:#2A2A2F}
+.btn.ghost:hover{background:#EAEAEE}
+.btn.danger{background:#FDECEC;color:#D64545}
+.btn.danger:hover{background:#F9D8D8}
+.btn.sm{height:32px;padding:0 12px;font-size:12.5px;flex:none;border-radius:16px}
+
+.add-card{
+  border:2px dashed #C6C6CD;border-radius:22px;min-height:230px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:12px;color:#6E6E76;cursor:pointer;transition:all .18s;background:rgba(255,255,255,.45);
+}
+.add-card:hover{border-color:#3FA0E0;color:#3FA0E0;background:#fff}
+.add-card .plus{width:52px;height:52px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(10,10,12,.07)}
+.add-card .plus svg{width:22px;height:22px}
+
+/* ---------- 待归类 ---------- */
+.orphans{display:flex;flex-wrap:wrap;gap:14px}
+.otile{
+  background:#fff;border-radius:16px;padding:10px;box-shadow:0 2px 10px rgba(10,10,12,.05);
+  display:flex;flex-direction:column;gap:8px;width:200px;
+}
+.otile .othumb{aspect-ratio:16/9;border-radius:10px;overflow:hidden;background:linear-gradient(135deg,#E6E6E9,#DEDEE2)}
+.otile .othumb img{width:100%;height:100%;object-fit:cover;object-position:var(--cp,50% 50%)}
+.otile select{
+  height:32px;border:1px solid #E4E4E8;border-radius:10px;font-size:12.5px;color:#111114;
+  background:#F7F7F9;padding:0 8px;width:100%;
+}
+.otile .odel{font-size:12px;color:#D64545;text-align:center;padding:2px 0}
+
+/* ---------- 文案编辑面板（首屏/关于/联系模块） ---------- */
+.cfg-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 18px;max-width:960px}
+.cfg-field{display:flex;flex-direction:column;gap:7px}
+.cfg-field.full{grid-column:1/-1}
+.cfg-field label{font-size:13px;font-weight:600;color:#55555C}
+.cfg-field input,.cfg-field textarea{
+  border:1.5px solid #E6E6E9;border-radius:13px;padding:11px 14px;font-size:14.5px;color:#111114;
+  background:#FFFFFF;transition:border-color .15s;width:100%;
+}
+.cfg-field textarea{resize:vertical;min-height:74px;line-height:1.55}
+.cfg-field input:focus,.cfg-field textarea:focus{border-color:#3FA0E0;background:#fff}
+.cfg-save-row{margin-top:22px;display:flex;gap:10px;align-items:center;max-width:960px}
+.cfg-save-row .hint{flex:1;font-size:12.5px;color:#8A8A92}
+.cfg-note{background:#F2F2F5;border-radius:16px;padding:16px 18px;font-size:13.5px;line-height:1.7;color:#55555C;max-width:960px;margin-bottom:22px}
+.cfg-note b{color:#111114}
+
+/* ---- V17：工牌正面图上传 ---- */
+.bup { display:flex;gap:10px;align-items:center;flex-wrap:wrap;max-width:960px }
+.bup .hint { font-size:12.5px;color:#8A8A92 }
+.fit-seg { display:inline-flex;border:1px solid #E3E3E8;border-radius:9px;overflow:hidden;background:#fff;flex:none }
+.fit-seg button { border:0;background:transparent;padding:7px 13px;font-size:12.5px;color:#55555C;cursor:pointer;font-family:inherit }
+.fit-seg button + button { border-left:1px solid #E3E3E8 }
+.fit-seg button.on { background:#111114;color:#fff }
+.badge-preview { margin-top:14px }
+.badge-preview img { width:210px;border-radius:12px;display:block;box-shadow:0 8px 22px rgba(6,25,46,.16) }
+.badge-preview .ph { font-size:12.5px;line-height:1.7;color:#8A8A92;background:#F2F2F5;border-radius:12px;padding:12px 14px;max-width:460px }
+.caps-block{margin-top:6px}
+.caps-row{display:grid;grid-template-columns:64px 1fr 1fr;gap:10px;align-items:center;margin-bottom:8px}
+.caps-row .cn{font-size:13px;font-weight:600;color:#55555C}
+.caps-row input{border:1.5px solid #E6E6E9;border-radius:11px;padding:9px 12px;font-size:14px;color:#111114;background:#FFFFFF;width:100%}
+.caps-row input:focus{border-color:#3FA0E0;background:#fff}
+
+/* ---------- 合集/环廊列表与预览墙（V11：补齐样式 + 16:9 取景） ---------- */
+.col-row{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1.5px solid #E6E6E9;border-radius:14px;margin-bottom:10px;background:#fff}
+.col-cov{width:80px;aspect-ratio:16/9;height:auto;border-radius:10px;flex:none;object-fit:cover;object-position:var(--cp,50% 50%);background:linear-gradient(135deg,#E6E6E9,#DEDEE2)}
+.col-meta{flex:1;min-width:0}
+.col-name{font-size:14px;font-weight:600;color:#111114;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.col-sub{font-size:12px;color:#8A8A92;margin-top:2px}
+.col-order{width:96px;flex:none;border:1.5px solid #E6E6E9;border-radius:10px;padding:8px 10px;font-size:13px;color:#111114;background:#fff}
+.wall-preview{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}
+.wall-item{border-radius:10px;overflow:hidden;background:linear-gradient(135deg,#E6E6E9,#DEDEE2)}
+.wall-item img{width:100%;height:auto;display:block;object-fit:contain}
+
+/* ---------- 弹层 ---------- */
+.mask{
+  position:fixed;inset:0;background:rgba(10,10,12,.44);backdrop-filter:blur(3px);
+  display:none;align-items:center;justify-content:center;z-index:100;padding:32px;
+}
+.mask.open{display:flex}
+.modal{
+  background:#fff;border-radius:26px;width:720px;max-width:96vw;max-height:88vh;overflow:auto;
+  padding:30px 32px;box-shadow:0 24px 70px rgba(10,10,12,.28);
+}
+.modal.wide{width:1060px}
+.mhead{display:flex;align-items:center;gap:14px;margin-bottom:22px}
+.mhead h2{font-size:22px;font-weight:600;flex:1}
+.mclose{
+  width:38px;height:38px;border-radius:50%;background:#EFEFF1;color:#55555C;
+  display:flex;align-items:center;justify-content:center;flex:none;
+}
+.mclose:hover{background:#E6E6E9}
+.mclose svg{width:16px;height:16px}
+
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px 18px}
+.field{display:flex;flex-direction:column;gap:7px}
+.field.full{grid-column:1/-1}
+.field label{font-size:13px;font-weight:600;color:#55555C}
+.field label span{color:#8A8A92;font-weight:400}
+.field input,.field textarea,.field select{
+  border:1.5px solid #E6E6E9;border-radius:13px;padding:11px 14px;font-size:14.5px;color:#111114;
+  background:#FFFFFF;transition:border-color .15s;width:100%;
+}
+.field textarea{resize:vertical;min-height:74px;line-height:1.55}
+.field input:focus,.field textarea:focus{border-color:#3FA0E0;background:#fff}
+.mfoot{display:flex;gap:10px;justify-content:flex-end;margin-top:26px;align-items:center}
+.mfoot .hint{flex:1;font-size:12.5px;color:#8A8A92}
+
+/* ---------- 图片管理 ---------- */
+.mgr-top{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.mgr-top .tip{flex:1;font-size:13px;color:#6E6E76}
+.img-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px}
+.tile{
+  position:relative;aspect-ratio:16/9;border-radius:15px;overflow:hidden;
+  background:linear-gradient(135deg,#E6E6E9,#DEDEE2);cursor:grab;
+  outline:3px solid transparent;outline-offset:-3px;transition:outline-color .15s,transform .15s;
+}
+.tile img{width:100%;height:100%;object-fit:cover;object-position:var(--cp,50% 50%);pointer-events:none}   /* 16:9 取景 */
+.tile.dragging{opacity:.45;cursor:grabbing}
+.tile.drag-over{outline-color:#3FA0E0;transform:scale(1.02)}
+.tile.cropping{outline-color:#3FA0E0;cursor:grabbing}
+.tile .crop-hint{
+  position:absolute;left:0;right:0;top:0;z-index:3;display:none;
+  background:rgba(63,160,224,.92);color:#fff;font-size:11.5px;text-align:center;
+  padding:5px 8px;letter-spacing:.02em;pointer-events:none;
+}
+.tile.cropping .crop-hint{display:block}
+.tile .idx{
+  position:absolute;left:9px;top:9px;min-width:26px;height:26px;border-radius:13px;padding:0 8px;
+  background:rgba(10,10,12,.72);color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);
+}
+.tile .cbadge{
+  position:absolute;left:9px;top:41px;background:#111114;color:#fff;font-size:11px;
+  padding:3px 9px;border-radius:11px;letter-spacing:.5px;
+}
+.tile .cbadge.wall{top:41px;background:#0E6FD8}
+.tile .cbadge + .cbadge.wall{top:70px}
+.tile .tacts{
+  position:absolute;left:0;right:0;bottom:0;display:flex;gap:6px;padding:9px;
+  background:linear-gradient(transparent,rgba(10,10,12,.62));opacity:0;transition:opacity .16s;
+}
+.tile:hover .tacts{opacity:1}
+.tbtn{
+  flex:1;height:30px;border-radius:15px;background:rgba(255,255,255,.94);color:#111114;
+  font-size:12px;font-weight:500;display:flex;align-items:center;justify-content:center;gap:4px;
+}
+.tbtn:hover{background:#fff}
+.tbtn.del{color:#D64545;flex:0 0 40px}
+.tbtn svg{width:13px;height:13px}
+.up-tile{
+  aspect-ratio:16/9;border:2px dashed #C6C6CD;border-radius:15px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:8px;color:#6E6E76;cursor:pointer;font-size:13px;background:rgba(255,255,255,.5);
+}
+.up-tile:hover{border-color:#3FA0E0;color:#3FA0E0;background:#fff}
+.up-tile svg{width:24px;height:24px}
+
+.uploids{margin-top:16px;display:none}
+.uploids.show{display:block}
+.uploids .ul-head{font-size:13px;font-weight:600;color:#55555C;margin-bottom:10px;display:flex;align-items:center;gap:10px}
+.uploids .ul-head .g{flex:1}
+.ul-grid{display:flex;flex-wrap:wrap;gap:10px}
+.ul-item{position:relative;width:96px;height:72px;border-radius:10px;overflow:hidden;background:#EEE}
+.ul-item img{width:100%;height:100%;object-fit:contain}
+.ul-item .rm{
+  position:absolute;right:4px;top:4px;width:20px;height:20px;border-radius:50%;
+  background:rgba(10,10,12,.75);color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;
+}
+
+.modal.small{width:420px}
+.confirm-text{font-size:15px;line-height:1.7;color:#2A2A2F;margin-bottom:24px}
+.confirm-text b{color:#D64545}
+
+.toast{
+  position:fixed;left:50%;bottom:36px;transform:translateX(-50%) translateY(20px);opacity:0;
+  background:#111114;color:#fff;font-size:14px;padding:13px 24px;border-radius:24px;z-index:200;
+  transition:all .25s;pointer-events:none;max-width:70vw;box-shadow:0 10px 30px rgba(0,0,0,.25);
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.err{background:#C03A3A}
+
+.perm-bar{
+  display:none;background:#FFF6E8;border:1.5px solid #F3DFAE;color:#8A6A1F;
+  border-radius:16px;padding:13px 18px;font-size:13.5px;line-height:1.6;margin-bottom:22px;
+}
+.perm-bar.show{display:block}
+
+.empty-note{color:#8A8A92;font-size:14px;padding:26px 4px}
+</style>
+</head>
+<body data-page-node-id="0EBhF6Asd3Y7ox5V0AvwJr">
+
+<!--pnid:KvOBCMpUvvcSIvHgM9DpHT--><!-- 左侧模块栏：对应原网页四大区块 -->
+<nav data-page-node-id="7crnaQcZFOBJCIaXX0b1Zh" class="rail">
+  <div data-page-node-id="6KDSgy4HAH4CRjHGpA8lNh" class="logo" title="Portfolio Studio">
+    <svg data-page-node-id="J9IAbGJddOywsiVdPTxJbV" fill="none" viewBox="0 0 24 24"><rect data-page-node-id="v7Emfw93s8QCCcFv16t1lP" height="18" rx="5" stroke="currentColor" stroke-width="2" width="18" x="3" y="3"/><circle data-page-node-id="3jy4fe6HJB7M82ljVv4P20" cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/></svg>
+  </div>
+  <button data-page-node-id="HdVqeFhZbMQAqQlEsvnyi0" class="rbtn" data-module="hero" onclick="showModule('hero')" title="首屏 Hero">
+    <svg data-page-node-id="SgpD2z8zr9mRhG9M9FCPUD" fill="none" viewBox="0 0 24 24"><rect data-page-node-id="NLQHFu2W4KnYmL1zTuuIk7" height="16" rx="3" stroke="currentColor" stroke-width="2" width="18" x="3" y="4"/><path data-page-node-id="zHaoqQUEXiIm4L4gqSkShT" d="M3 15l5-4 4 3 3-2.5 6 4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg><!--pnid:FAStWuvdem5OV8j5B2RuxN-->
+    首屏
+  </button>
+  <button data-page-node-id="DwpOzO0MMVBoMUwbwMhSUy" class="rbtn" data-module="about" onclick="showModule('about')" title="关于 About">
+    <svg data-page-node-id="a0EyA3jL3Ev6ZtNk4AMMOB" fill="none" viewBox="0 0 24 24"><circle data-page-node-id="vea7I6xVwvPEEB1G7sVMby" cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/><path data-page-node-id="q27BxPUuux8arIu7vZDngG" d="M4 20c0-4 4-6 8-6s8 2 8 6" stroke="currentColor" stroke-linecap="round" stroke-width="2"/></svg><!--pnid:iMpXGMvI9j8Q78Db9qPPe0-->
+    关于
+  </button>
+  <button data-page-node-id="3aQfb9f0kcOqtF9b5g1YFB" class="rbtn active" data-module="works" onclick="showModule('works')" title="作品 Works">
+    <svg data-page-node-id="kvEcRMTsN3zWp1XVIVTlfT" fill="none" viewBox="0 0 24 24"><rect data-page-node-id="qswPBFF8cnFjxOmB8QLPiC" height="8" rx="2" stroke="currentColor" stroke-width="2" width="8" x="3" y="3"/><rect data-page-node-id="jYR5JqMEK6FujZo2ZZ6Uca" height="8" rx="2" stroke="currentColor" stroke-width="2" width="8" x="13" y="3"/><rect data-page-node-id="qtGIZjm45Pg4M8ANE5tslz" height="8" rx="2" stroke="currentColor" stroke-width="2" width="8" x="3" y="13"/><rect data-page-node-id="yYy0NQzR6A2HHmCYPfBiSn" height="8" rx="2" stroke="currentColor" stroke-width="2" width="8" x="13" y="13"/></svg><!--pnid:e1hGQNLkIferQUKd4yKyeB-->
+    作品
+  </button>
+  <button data-page-node-id="KGLdnG86vUJyHgHY520B2S" class="rbtn" data-module="collection" onclick="showModule('collection')" title="作品合集 Collection">
+    <svg data-page-node-id="treIzRpcDcDJ6G9FViPStP" fill="none" viewBox="0 0 24 24"><path data-page-node-id="RKiHSk4tvHsSuAV6ByB6W8" d="M4 5h16v14H4z" stroke="currentColor" stroke-linejoin="round" stroke-width="2"/><path data-page-node-id="m2QyWhdYFgRFoNnX5cgKg5" d="M4 9h16M9 5v14" stroke="currentColor" stroke-width="2"/></svg><!--pnid:6iom8M6KbKDQl7c2kBGsPr-->
+    合集
+  </button>
+  <button data-page-node-id="emQOSC54RONCxOmLq8md81" class="rbtn" data-module="gal" onclick="showModule('gal')" title="环廊 Gallery">
+    <svg data-page-node-id="VDccesrayZhlPg0u5B8NwV" fill="none" viewBox="0 0 24 24"><rect data-page-node-id="3ENjMZuSbv6jQP9s5vRJ2b" height="10" rx="1.6" stroke="currentColor" stroke-width="2" width="7" x="2" y="7"/><rect data-page-node-id="OTfw2jnZlMSPajF4nnR8b3" height="16" rx="1.6" stroke="currentColor" stroke-width="2" width="7" x="11" y="4"/><rect data-page-node-id="x75tsrPbc8eDHdVXOnrybm" height="6" rx="1.2" stroke="currentColor" stroke-width="2" width="2.5" x="20" y="9"/></svg><!--pnid:4DctsKv4SszVBUtp7NklVh-->
+    环廊
+  </button>
+  <button data-page-node-id="LBACFafY0eWcxco0a6IQhH" class="rbtn" data-module="contact" onclick="showModule('contact')" title="联系 Contact">
+    <svg data-page-node-id="dLLhiiBDJN7GV35vgRUIaU" fill="none" viewBox="0 0 24 24"><path data-page-node-id="nFYP6EqlUhNpboniUTHeSr" d="M4 5h16v14H4z" stroke="currentColor" stroke-linejoin="round" stroke-width="2"/><path data-page-node-id="V4rBGDihuxHBgbYh9gpMpD" d="M4 7l8 5 8-5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg><!--pnid:bCYuQM2D9s99Irw8zOaIAN-->
+    联系
+  </button>
+  <div data-page-node-id="YwF1PzTB5WEdycS6nG5kYr" class="spacer"></div>
+  <button data-page-node-id="rMAz10QpQ37CaCM8QNoup5" class="rbtn" onclick="reloadAll()" title="刷新数据">
+    <svg data-page-node-id="5CrVtzupdPsmvKK25X8EnL" fill="none" viewBox="0 0 24 24"><path data-page-node-id="akWxZWEPZFECGD7wSARfeB" d="M20 12a8 8 0 1 1-2.3-5.6M20 3v5h-5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg><!--pnid:7qSJPZ0IphB9b6sxZA84Yl-->
+    刷新
+  </button>
+  <a data-page-node-id="fDWxFenbXqnSoikGaW4ngj" class="rbtn" href="https://workbuddy.link/p/ybfwaes5w2ueCJGmY5EtXO" target="_blank" title="打开公开作品集" style="text-decoration:none">
+    <svg data-page-node-id="RjBQTAZYKMCwcYh7KXQqVx" fill="none" viewBox="0 0 24 24"><path data-page-node-id="BFQkb6cKAqLMSoxeMHF1OQ" d="M14 4h6v6M20 4l-9 9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/><path data-page-node-id="aQ5BdvnaDt6jRRPZ1KaUYA" d="M19 13.5V18a2.5 2.5 0 0 1-2.5 2.5H6A2.5 2.5 0 0 1 3.5 18V7.5A2.5 2.5 0 0 1 6 5h4.5" stroke="currentColor" stroke-linecap="round" stroke-width="2"/></svg><!--pnid:DdbxRkl0w17ytLr2Mj9l3V-->
+    公开
+  </a>
+</nav>
+
+<div data-page-node-id="8chxjJhTLaHQoR7y3EUSvq" class="wrap">
+  <div data-page-node-id="14KVgjTyw0tAeryIqKld39" class="topbar">
+    <div data-page-node-id="PRXdDQGhyFnl59rw3RkPJx" class="search" id="search-box">
+      <svg data-page-node-id="uyxy1S5fHGXlgDuXK9jPTq" fill="none" viewBox="0 0 24 24"><circle data-page-node-id="kNXzBqO3IgSfjrswagPsAC" cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path data-page-node-id="IQF35gkbw12mHilHkdsbt9" d="M20 20l-3.5-3.5" stroke="currentColor" stroke-linecap="round" stroke-width="2"/></svg>
+      <input data-page-node-id="2OBQtPEIUYgLHxzEdRwnEx" id="search-input" oninput="onSearch(this.value)" placeholder="搜索分区名称…" type="text">
+    </div>
+    <div data-page-node-id="qkF6pyCUWuu51SEdSLodve" class="grow"></div>
+    <span data-page-node-id="z8GN7bCMawrBpq6KrNQDe6" class="stat-pill" id="sync-pill"><!--pnid:eMALwpdv28LPOYHGP2H24w-->同步状态检测中…</span>
+    <span data-page-node-id="3c7KRhJ8c2yWAdpDMRG1i2" class="stat-pill"><b data-page-node-id="Dz2RBb9Y4naBRBSsQoGJ8T" id="stat-projects"><!--pnid:nYbwWP0NJOhMBeXm3ttcoo-->0</b><!--pnid:ePQmHapyPHiwaFShyPmA7L--> 个分区 · <b data-page-node-id="wOmuVDdAfG0piNIkF3nmFg" id="stat-images"><!--pnid:CGZ6Mf1SfvyJLh3nzjtEr1-->0</b><!--pnid:F3haZ408FwT7aACzsze0Nl--> 张图</span>
+  </div>
+
+  <div data-page-node-id="cJePsY7RxVqEdCG8qRUOqa" class="page-head">
+    <h1 data-page-node-id="Y5tEnyupBvLKAPucgzRCaj" class="page-title" id="mod-title"><!--pnid:SeLDBZuNLtsouV5iEEXFaS-->作品 <em data-page-node-id="qGTlJS7MPpin9qKkYRNJPF"><!--pnid:BXFsiy5rrqd6e0QHpdZ07c-->Works</em></h1>
+  </div>
+  <div data-page-node-id="ieAOaTRQXuXtprXvh6SNEA" class="page-sub" id="mod-sub">
+    <span data-page-node-id="D5BxUFrfVNWpo1pPpr76q6"><!--pnid:HWH7Zcia7UgVBJeteBetJh-->每个分区 = 原网页里的一个作品位置</span><span data-page-node-id="VkHptpw8XzCZrZK53AVnIe" class="dot"></span>
+    <span data-page-node-id="XEu8r2sVe74iP1roYjWN2U"><!--pnid:AukADMctYWAq8ZbwbmkDzr-->第 1 张图自动作为封面</span><span data-page-node-id="2GuwO7vUjIpFSmvKAU8Yos" class="dot"></span>
+    <span data-page-node-id="8pEHt3JKEUaNflmxt5XOk6"><!--pnid:QMM5xBlzFltsGoOFtYm90R-->只有登录的你才能修改</span>
+  </div>
+
+  <div data-page-node-id="2hyRFEYzHVWedhgOyofGzV" class="perm-bar" id="perm-bar"><!--pnid:jUk8brJO0OfVOoJ0Gw8lAQ-->
+    检测到写入权限受限：请确认你是以<b data-page-node-id="rRd3AuaE0MRLFuAImwH3pT"><!--pnid:ZvOQaLsfGolpuQIslTCUC3-->所有者账号</b><!--pnid:HJQ3VOgZ1mB9kwsPeb4AdC-->登录后，通过协作态链接打开本页（不要用公开发布链接）。登录并刷新后即可上传与排序。
+  </div>
+
+  <!--pnid:vjzdbsmnzyIOw2weCozNjf--><!-- ===== 首屏 Hero 模块 ===== -->
+  <section data-page-node-id="gIpkKoKoQHmASZhTpDyKDN" class="module" id="mod-hero">
+    <div data-page-node-id="I5cNFDGxWFJ4JBlBwwqAYu" class="cfg-note"><!--pnid:cu5bSGOgo0ENJaZIoQ6gSD-->
+      这一块对应公开页的<b>封面层</b>：左栏<b>引出句</b> + <b>首屏背景图</b>。改完保存，公开页首屏同步更新。顶部标语与超大「DA REAL」字标是版式固定元素，不走后台 —— 想改它们直接跟 AI 助手说。
+    </div>
+    <div data-page-node-id="uGXbcYVsshLUIgvcXGyVkv" class="cfg-grid">
+      <div data-page-node-id="miyl8tCl4GPvCFkxmUM5IO" class="cfg-field full"><label data-page-node-id="AF0Ec7rGgEKoNqtgt0GVue"><!--pnid:nExSmEjkwVOIm7R1o0pN8I-->引出句（封面层那句介绍）</label><textarea data-page-node-id="zj4fTmBgRTezsltjVklr1L" id="h-lead" placeholder="六年设计，四个品类，一套方法——先看清生意，再把品牌做出来。"></textarea></div>
+    </div>
+    <div data-page-node-id="5BDMEjRoHsjnuYHUCmiWxI" class="section-label" style="margin-top:24px"><!--pnid:0qNsKLYklz3RNt94K9TAIO-->首屏背景素材</div>
+    <div data-page-node-id="kVtFPmoFOOanxfXd72VM" class="cfg-note"><!--pnid:JIGk5wCEXcEDNouvJ6kjuP-->
+      背景图可直接上传：公开页首屏会把它压在网点画布之上（滤色混合），没传图时首屏维持现在的样子。首屏动效「舷窗网点」是代码画的实时动效，不靠视频、也不再有视频文件。<b>想换动效或加视频，直接跟 AI 助手说</b>，这块改代码比在后台贴链接靠谱。
+    </div>
+    <div data-page-node-id="PAc2rV7SEcUExoDYqcconD" class="cfg-grid">
+      <div data-page-node-id="tYcB4cjsJ0lTNpvEd8vahz" class="cfg-field full"><label data-page-node-id="E13oZzrSrqqNfNAEyzEWvl"><!--pnid:SMTlDRdOCB6rD6SV8xKDu2-->背景图（可上传）</label>
+        <div data-page-node-id="Ayj7MCtOirZObY1aighqKl" class="up-row">
+          <input data-page-node-id="DC6cFuLB5GzAwHIghLGwoP" accept="image/*" id="hero-bg-input" onchange="onHeroBgPicked(this)" type="file" style="display:none">
+          <button data-page-node-id="ZGLcFvK8Ag1LezxPiLga5t" class="btn ghost sm" onclick="document.getElementById('hero-bg-input').click()" style="flex:none">
+            <svg data-page-node-id="oGSuwBHpDG9IEXJ9CmVyrv" fill="none" viewBox="0 0 24 24"><path data-page-node-id="xDUv0GZE8pmh9uDaubEfTD" d="M12 16V4m0 0l-4 4m4-4l4 4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/><path data-page-node-id="MECkG7FWQ0O1VsP3VnP5Fl" d="M4 16v3a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 20 19v-3" stroke="currentColor" stroke-linecap="round" stroke-width="2"/></svg><!--pnid:TV3Fel6nus0LAQLUrN8IGA-->
+            上传背景图
+          </button>
+          <button class="btn ghost sm" onclick="clearHeroBg()" style="flex:none">移除背景图</button>
+          <span data-page-node-id="BGXjXpo3PAZ1p5f4RDtH4J" class="hint" id="hero-bg-hint"><!--pnid:4XGGBAkLsmpcN9LAW1OWth-->选图后点「保存首屏」生效</span>
+        </div>
+        <div data-page-node-id="uDH7yokdEjszZPZq7yVbA0" class="hero-bg-preview" id="hero-bg-preview"></div>
+      </div>
+      
+    </div>
+    <div data-page-node-id="XHQjYFSDXlf2NT72vd9F0H" class="cfg-save-row">
+      <span data-page-node-id="TiGCcrH81Bk7xmGBAbz8Vw" class="hint"><!--pnid:U5dc3bljgrPtNksIuCTqzu-->公开页首屏会读取这里的内容</span>
+      <button data-page-node-id="xkePwG0E5olGdnUK5yHrl8" class="btn primary sm" onclick="saveConfig('hero')" style="flex:none; min-width:96px"><!--pnid:l8FofzoKi5K11QRkSkRdOH-->保存首屏</button>
+    </div>
+  </section>
+
+  <!--pnid:EuhI0Bz5d6rntFD7jrPjMt--><!-- ===== 关于 About 模块 ===== -->
+  <section data-page-node-id="aLXSKxF8kr1llJ8dauJwTg" class="module" id="mod-about">
+    <div data-page-node-id="rTvvlNHPeKQJU8cRCORZsJ" class="cfg-note"><!--pnid:93AvTlQohUYuzrnX9CEcqe-->
+      这一块对应你原网页的<b data-page-node-id="G9lJaWZbCLlt5G3RzhobQz"><!--pnid:OwrENnd9dZUQuaz5H5iANy-->关于</b><!--pnid:yNmRqXeBXgtkmhh4syRTsx-->：自我介绍 + 能力与服务 6 项。改完保存，公开页关于区会同步更新。
+    </div>
+    <div data-page-node-id="RsSfjDAx2q1sLP7SzDu2qt" class="cfg-grid">
+      <div data-page-node-id="xCwXvLxBoAnUaNwzz17oga" class="cfg-field"><label data-page-node-id="OdPgiKCYDAP211QzQtyMui"><!--pnid:ehjAu1ukSXqifYAWN4UzcX-->姓名 / 标识</label><input data-page-node-id="eQuGjyy5ktPGNZvL365t8s" id="a-name" placeholder="DA REAL" type="text"></div>
+      <div data-page-node-id="NZ53lrQl4boUdxzAFT4BL6" class="cfg-field"><label data-page-node-id="Y3lOuGLWj39EcJkqzBGPyP"><!--pnid:Po8d5nphrB2uuOyslhDo0F-->职位</label><input data-page-node-id="11v6aZOIiFXsvgQB9gRZlD" id="a-sub" placeholder="Brand / Packaging / Poster Designer" type="text"></div>
+      <div data-page-node-id="zK0ifFa29vn3IZ5oFoeoMN" class="cfg-field full"><label data-page-node-id="nUxPlqrZmdVHFArIF2wC5N"><!--pnid:b8lDhEB1g7nOJeowD9RoIa-->简介（第一段）</label><textarea data-page-node-id="TQKUvUueTsqhEl73Eru3Is" id="a-body1" placeholder="品牌 · 包装 · 海报设计师……"></textarea></div>
+      <div data-page-node-id="zqpWmgakvWmFXaSMGEQ6B7" class="cfg-field full"><label data-page-node-id="TYzziOCT2yJCcDBfvWGMZb"><!--pnid:8Nnhw26n28QQX6NcXUrPdg-->简介（第二段）</label><textarea data-page-node-id="tmA48NNSJQIBRbwdtJFKE7" id="a-body2" placeholder="视觉传达设计专业背景……"></textarea></div>
+    </div>
+    <div data-page-node-id="pkPGEe2D78Tewwagig4mj3" class="section-label" style="margin-top:24px"><!--pnid:I9lLRrCyaJFZ4BYND3shWa-->能力与服务 <span data-page-node-id="R6LIMV83ao9PxNkkJjnd8a" class="cnt"><!--pnid:vCe80Ut58ZKtaAQTAB6Haj-->6 项</span></div>
+    <div class="section-label" style="margin-top:24px">工牌正面图 <span class="cnt">关于区左边那张吊牌</span></div>
+    <div class="cfg-note">
+      上传一张图就替换工牌正面 —— 吊绳、金属夹、塑料套、斜向反光都保留；不传则维持原来的 <b>DA / REAL</b> 矢量文字版。建议用竖图（比例接近 3:4）。<br>
+      <b>适配</b>：「铺满」按工牌比例裁切填满；<b>「完整」不裁图</b>，留白用底色补齐 —— 海报、图文混排这类别裁的图选「完整」。
+    </div>
+    <div class="bup">
+      <input accept="image/*" id="badge-input" onchange="onBadgePicked(this)" type="file" style="display:none">
+      <button class="btn ghost sm" onclick="document.getElementById('badge-input').click()" style="flex:none">上传工牌图</button>
+      <button class="btn ghost sm" onclick="clearBadge()" style="flex:none">用矢量版</button>
+      <div class="fit-seg" id="badge-fit-seg">
+        <button data-fit="cover" onclick="setBadgeFit('cover')">铺满</button>
+        <button data-fit="contain" onclick="setBadgeFit('contain')">完整</button>
+      </div>
+      <span class="hint" id="badge-hint">选图后点「保存关于」生效</span>
+    </div>
+    <div class="badge-preview" id="badge-preview"></div>
+    <div data-page-node-id="nyT6Z5KDLSvv4VVZfVCLsN" class="caps-block" id="caps-block"></div>
+    <div data-page-node-id="DpV5j6qhWuHxbZQVSmIJNe" class="cfg-save-row">
+      <span data-page-node-id="u4sApw85DA40l7tQccqALU" class="hint"><!--pnid:roQBx9Q61GKFah5a6VbfrV-->能力服务顺序即展示顺序</span>
+      <button data-page-node-id="UeCdCrUGTz6KPEc5L3XeS3" class="btn primary sm" onclick="saveConfig('about')" style="flex:none; min-width:96px"><!--pnid:Vm6QARJ8rPaAs0gld7kUxd-->保存关于</button>
+    </div>
+  </section>
+
+  <!--pnid:KoKuhladdYqLoGbX2Bp9bK--><!-- ===== 作品 Works 模块 ===== -->
+  <section data-page-node-id="7puRSO7IDOPb82zlrAFdDe" class="module show" id="mod-works">
+    <div data-page-node-id="UQusafGfODzX4oJGaKUB6H" class="section-label"><!--pnid:dsn6bUJ5VofaKPKg1KwASp-->分区管理 <span data-page-node-id="snxkmeKtkPEZstNbD6havj" class="cnt" id="proj-cnt"></span></div>
+    <div data-page-node-id="sITvVyd1rjYIhr0ApRrJeY" class="proj-grid" id="proj-grid"></div>
+
+    <div data-page-node-id="TE4FYqCD5Hq92VKcrNtUH9" class="section-label"><!--pnid:KrGgB3FWbUsVPjwyIbAaOk-->待归类图片 <span data-page-node-id="y8GJN5AmWjAfNv2daKawWU" class="cnt" id="orphan-cnt"></span></div>
+    <div data-page-node-id="txCKLdg5ILg5CfDPGIWRWC" id="orphan-wrap"></div>
+  </section>
+
+  <!--pnid:3abbPsrUU5hew61naCWVUm--><!-- ===== 作品合集 Collection 模块 ===== -->
+  <section data-page-node-id="jJx6sZMG9zoX1KGBUimgz2" class="module" id="mod-collection">
+    <div data-page-node-id="7ITPUGmJWyT6FwTWC5DQtQ" class="cfg-note"><!--pnid:3OJUK4hnd5ukZxbrbVmwYL-->
+      这一块对应你原网页的<b data-page-node-id="V79kHqauoFwvd041JwYENg"><!--pnid:GUjcaKKTTPQlM6r6sqj1vB-->「作品集」二级页</b><!--pnid:AO7Q3wZrhoBmTeouOm52gk-->：导航里点「作品」进来的那一面——所有作品画面拼成一整墙。这里管两件事：① 合集页文案；② 哪些项目进合集、什么顺序。
+    </div>
+    <div data-page-node-id="hAahEWiCbByox8JnE4zGwD" class="section-label"><!--pnid:TqhDtSiytlOYGTfbfkF7kf-->合集页文案</div>
+    <div data-page-node-id="DWJr0s4iDoGFk9lONWWhGA" class="cfg-grid">
+      <div data-page-node-id="Yf0LL4oAujh3VomB43P9KF" class="cfg-field full"><label data-page-node-id="K8CnUX3Bmo0I5CYPtTDzM2"><!--pnid:EuRW2o4dc6DanCx0gMUDpk-->标签（小字，如 Works / 2020—2026）</label><input data-page-node-id="DCpYl86SHhaSSfdPZaFY3L" id="co-label" placeholder="Works / 2020—2026" type="text"></div>
+      <div data-page-node-id="7UEDXn7C41rdV1tA9qGbJ3" class="cfg-field full"><label data-page-node-id="XaD4BKfQGeFcJu68BOb2ev"><!--pnid:0JeDWyOOPcAOSoPSJxfp3S-->大标题</label><input data-page-node-id="ilaqiPv6bK6C6C3Msf4ztH" id="co-title" placeholder="作品集" type="text"></div>
+      <div data-page-node-id="EqEuZjBZlCwsR4XvN3XTj3" class="cfg-field full"><label data-page-node-id="b4d0Pyt84FHPEKqfzTuzsM"><!--pnid:DoysbmuVxrV9MDAUEk7AFq-->副标题 / 介绍</label><textarea data-page-node-id="o3caHPOMuchMbO8NtZonYI" id="co-sub" placeholder="品牌识别 · 包装系统 · 商业视觉..."></textarea></div>
+    </div>
+    <div data-page-node-id="xScQc3sYWiU0Q3Z8CKr8LQ" class="cfg-save-row">
+      <span data-page-node-id="B9OSyyZwHOPVvienFJD5k0" class="hint"><!--pnid:3S1fPP94jgyZJk6XlF5FYU-->改完保存，公开页「作品集」页会同步更新</span>
+      <button data-page-node-id="iQxN0OGR9ws6zKt58doBAD" class="btn primary sm" onclick="saveConfig('collection')" style="flex:none; min-width:110px"><!--pnid:P03X8261FziPSIx8SP2NAd-->保存合集文案</button>
+    </div>
+
+    <div data-page-node-id="CyhQpspnFmdWaIpEGwxas7" class="section-label"><!--pnid:O2ewSXy1d7HhZT5Q8sUgDd-->参与合集的项目与顺序 <span data-page-node-id="uvcH7MzCuTz5Tpb8buzB9h" class="cnt" id="col-cnt"></span></div>
+    <div data-page-node-id="EUkADzncfeGdXivr6ZQPK5" class="cfg-note"><!--pnid:sGR4p4tAm7uR6nR0rSfNxC-->填数字 = 该项目进入合集并排在该顺序（1 最前）；留空 = 不进合集。改完点「保存合集顺序」。</div>
+    <div data-page-node-id="9ji74nZAG4lkXS7aaz8pad" class="col-list" id="col-list"></div>
+    <div data-page-node-id="YuZnAoF17YDuAbJwHfjous" class="cfg-save-row">
+      <span data-page-node-id="4YzEZHtiyNbSwK0mBLzSCN" class="hint"><!--pnid:tdA9GUKJF41ttrVz9OUS00-->公开页「全部作品」墙按这里的顺序拼</span>
+      <button data-page-node-id="tHUbpDinRjS2421zvwoHhF" class="btn primary sm" onclick="saveCollectionOrder()" style="flex:none; min-width:130px"><!--pnid:yi2pJ75KyN3HSAcXQBXR4V-->保存合集顺序</button>
+    </div>
+
+    <div data-page-node-id="ooYODAbytcG6fF6LrYwshE" class="section-label"><!--pnid:WLqPs0ERY07Uh4bSbwWa8C-->全部作品墙预览</div>
+    <div data-page-node-id="Ib2AJ5rs37pNQ2MDTLcqnC" class="cfg-note"><!--pnid:anPa4TBD1eHQc0eoPlJCSS-->这就是公开页「作品集」页会展示的样子（按上面顺序 + 各项目内部图序拼成）。</div>
+    <div data-page-node-id="GAOP9EiGz64Vypq3rZxibh" class="wall-preview" id="wall-preview"></div>
+  </section>
+
+  <!--pnid:15mRjRcz7fB9O3qBapezvY--><!-- ===== 环廊 Gallery 模块 ===== -->
+  <section data-page-node-id="pVAfmyAnPM2eTmVqTo63m9" class="module" id="mod-gal">
+    <div data-page-node-id="qb4pZfIJ7DDl5AFWl8un1d" class="cfg-note"><!--pnid:MZXuXauw31jCkJtmBXiOag-->
+      这一块对应首页的<b data-page-node-id="QTf5aK6GdAS4n60oqY9RKl"><!--pnid:KnJ2LOGGUYw5YqJJ9kJmCM-->「环廊」</b><!--pnid:ZUK1ebKw6IG1UXazJffTPz-->——横向环游那一排卡片。规则：<b data-page-node-id="VLnAmO7QrQaJnL4DRhHobk"><!--pnid:0PqMYEFAho1FMwMZ5Eq0aN-->精选区之外的项目自动进环廊</b><!--pnid:IsQruaC78RigLZff0t2O4b-->，按下面的顺序从左到右排。精选区固定是最前面那 3 张作品大卡。
+    </div>
+    <div data-page-node-id="XpKPzA1YCkzYxPEHpBkXFn" class="section-label"><!--pnid:x2Lyz8DgPl4Rq2EW046F5B-->环廊项目与顺序 <span data-page-node-id="9U2lVdS7r0fzQ8YNOSc5Ha" class="cnt" id="gal-cnt"></span></div>
+    <div data-page-node-id="f31hjRLlr5Gf0fBL5E52Jv" class="cfg-note"><!--pnid:b1V7EIlFzOBqUabQa04dD3-->填数字 = 在环廊里的位置（1 最前）；留空 = 不进环廊。改完点「保存环廊顺序」。</div>
+    <div data-page-node-id="lRWH8Vk7z99mq13BoZfOEU" class="col-list" id="gal-list"></div>
+    <div data-page-node-id="V9SaKmFDS8gmibbKU2n6sp" class="cfg-save-row">
+      <span data-page-node-id="oCvUMqy5mFyltDiULQDKrv" class="hint"><!--pnid:TGKb6soboGV1cnJ060YIS6-->公开页首页「环廊」按这里的顺序转</span>
+      <button data-page-node-id="kAbXFKnVsozqlejgkTlpT9" class="btn primary sm" onclick="saveGalleryOrder()" style="flex:none; min-width:130px"><!--pnid:aNHONuzIjCD4fteC1FSuRm-->保存环廊顺序</button>
+    </div>
+    <div data-page-node-id="e3M3YsO3Y30t6kB2eWBB9C" class="section-label"><!--pnid:fG9KIy80WPcHxfdGSOfPlh-->环廊预览</div>
+    <div data-page-node-id="MyArHEzJ1JCjgLD2w6nq6p" class="cfg-note"><!--pnid:YgvP9uv46u0Lh6DcDI0iDC-->这是环廊会用到的一批封面（每项目取第 1 张图）。</div>
+    <div data-page-node-id="sExeOkGqRW4TTEq74s3B2O" class="wall-preview" id="gal-preview"></div>
+  </section>
+
+  <!--pnid:Z6T8234pmt4GyW3g7KgJNE--><!-- ===== 联系 Contact 模块 ===== -->
+  <section data-page-node-id="EWsAh9QHHcJl3BTzziCwT7" class="module" id="mod-contact">
+    <div data-page-node-id="EJQDcZQlYkff8SvPUTvF0B" class="cfg-note"><!--pnid:o1VlRrp8TYFNcQJcQ2uuD4-->
+      这一块对应你原网页的<b data-page-node-id="yghuDtmH4BcdSu1WKc4IRn"><!--pnid:bLGD2NbNku1SY8mWd0pwxf-->联系</b><!--pnid:j2EQ8RC8aRXdghjDFgtTS2-->：标题、简介、电话、微信。改完保存，公开页联系区会同步更新。
+    </div>
+    <div data-page-node-id="FLD2CbmgauTPeqD4SFTf24" class="cfg-grid">
+      <div data-page-node-id="hDLZAF7R4Knj9kRWWus7d2" class="cfg-field full"><label data-page-node-id="6tTbIAlBfZCcylKKhEOFEo"><!--pnid:ma6XM2MtgSkqlr6IUXckLe-->标题</label><input data-page-node-id="UFq4ZQ4pisCtvtnIBjmsLg" id="c-title" placeholder="有一个想做的项目？聊聊看。" type="text"></div>
+      <div data-page-node-id="SzyxBj9d57b2HF1VdxuH2O" class="cfg-field full"><label data-page-node-id="qXRVee0z1ao4FLs6BcKhpV"><!--pnid:MPReYg8519AyJuZx0rJhmA-->简介</label><textarea data-page-node-id="i0qJQXlz0VxRXrGSNKVJY8" id="c-scope" placeholder="品牌设计、包装设计与视觉系统……"></textarea></div>
+      <div data-page-node-id="ouPdQrJAFFLdQZ4w0ya514" class="cfg-field"><label data-page-node-id="bXSThkv0vn2V3GxAt61gFW"><!--pnid:UkGMIwQkT2EIR1PtXkhZB3-->电话</label><input data-page-node-id="ISBeFpJpPEHxwF395IWPWv" id="c-phone" placeholder="18256998160" type="text"></div>
+      <div data-page-node-id="n2Y0nSLQjrEKbYRUcEpw11" class="cfg-field"><label data-page-node-id="HOY73HwjVDd1MxJ4G0f3wU"><!--pnid:bHcPO4DYdrd2ajjWzSpyHk-->微信</label><input data-page-node-id="upozILcugMu6c6GqlFochM" id="c-wechat" placeholder="DdReal_Design" type="text"></div>
+      <div data-page-node-id="dRpPnPAZZPl8i6SNfVt9RA" class="cfg-field"><label data-page-node-id="TRRfuVZFLZmM4AXMua99c0"><!--pnid:ctcJRhW2mlHn3UbgR5IO5t-->邮箱</label><input data-page-node-id="3YumOGUHxilfugNd37UONx" id="c-email" placeholder="1903178121@qq.com" type="text"></div>
+      <div data-page-node-id="BAu3odzcTym2R0tS9iA5nG" class="cfg-field full"><label data-page-node-id="MeMNzGgPGHdvhe6tYFqCw0"><!--pnid:ilsKEXJ2jqrH7tV36zSZpD-->版权署名</label><input data-page-node-id="sdiHJl8i2pO3RJQMAgXKVT" id="c-copyright" placeholder="© 2026 DA REAL · 品牌设计师" type="text"></div>
+    </div>
+    <div data-page-node-id="GgSAfVRctRAe9f63C687ed" class="cfg-save-row">
+      <span data-page-node-id="4v1MW204uugyHPmMo9YcIE" class="hint"><!--pnid:mGu6GjDWrDFe5md75e7jwj-->公开页联系区会读取这里的内容</span>
+      <button data-page-node-id="GtPtK0BnLnB099fMBdFeZh" class="btn primary sm" onclick="saveConfig('contact')" style="flex:none; min-width:96px"><!--pnid:elD7K7F0da9pfNcetTTED6-->保存联系</button>
+    </div>
+  </section>
+</div>
+
+<!--pnid:ypa4Qfls2bwGPjegMMqI0q--><!-- 编辑分区信息 -->
+<div data-page-node-id="vu07MVTRwfaynF8wWngEWW" class="mask" id="mask-edit" onclick="if(event.target===this)closeModal('mask-edit')">
+  <div data-page-node-id="vXKDadBbf1nOh6w8IHwLnI" class="modal">
+    <div data-page-node-id="RYBdNeJLBoPTCDqE7eEP7N" class="mhead">
+      <h2 data-page-node-id="ECVlEOeHriNX2iA6tMzQl0" id="edit-title"><!--pnid:u1DCxX1yp6pZbVdK39HyOW-->编辑分区</h2>
+      <button data-page-node-id="Ix3kLXeQxlTKjbRxfEdbH1" class="mclose" onclick="closeModal('mask-edit')"><svg data-page-node-id="4bIjvB1jOlgHWJDg84k8Ke" fill="none" viewBox="0 0 24 24"><path data-page-node-id="h1AhTfjFlCccZG4yb2xOmh" d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-linecap="round" stroke-width="2.2"/></svg></button>
+    </div>
+    <div data-page-node-id="exqs8lqIKEBVhPGVKHGDbt" class="fgrid">
+      <div data-page-node-id="jJxNLMr79tRZ1MiFXnPi7B" class="field"><label data-page-node-id="KTYXz8SBpV48GFJlZJYQEg"><!--pnid:cZUXF1HLBBNa8jhqtwNhHm-->名称 <span data-page-node-id="Eenk5NPEJje9AEvR12hGxR"><!--pnid:6jnXmD21Gg24NCeiiZpSW4-->*必填</span></label><input data-page-node-id="xsgBaC9Yzf5PBJzSQh7RoK" id="f-name" placeholder="如：Bello 贝拉" type="text"></div>
+      <div data-page-node-id="xbuty1Wr3h5lXFbjIfQnsq" class="field"><label data-page-node-id="t4VUu4AEL1flwJ8N2tyfmB"><!--pnid:uBHdfb1b7vsIJCvVeQ9afM-->英文标题</label><input data-page-node-id="yONxrTeVJYvSJUmBlli3t4" id="f-en" placeholder="如：BELLO" type="text"></div>
+      <div data-page-node-id="0HHX7akFSgwdujNxf7k9HA" class="field"><label data-page-node-id="Yk5SMgiv7TEHaitrtDxC6v"><!--pnid:rdoOJh71wQmwdgTSPuqb5x-->年份</label><input data-page-node-id="sh7BBykyTx2lFrU2DXB292" id="f-year" placeholder="如：2025" type="text"></div>
+      <div data-page-node-id="3lvQooGIODKrb7Bd71OMoc" class="field"><label data-page-node-id="Rvr6cqvEBJAK1ZkT7TnVEg"><!--pnid:VxuXHkgH2Ht9FuQWDvJyXE-->分类</label><input data-page-node-id="8y4RUJEZHfCVwDcyFBwTe9" id="f-cat" placeholder="如：品牌设计 · 宠物服饰" type="text"></div>
+      <div data-page-node-id="3ma6OavIDCRtD0lQXE90e7" class="field"><label data-page-node-id="jt6YRKDu9gBfYZdjDwbqeZ"><!--pnid:3EnWIwMIKByrNKlQ9OTELE-->角色</label><input data-page-node-id="8sIzEYoZ1tC5XQuE4kfCXU" id="f-role" placeholder="如：Brand Designer" type="text"></div>
+      <div data-page-node-id="UDrW5r5RYMw7nFpWyoTDvU" class="field"><label data-page-node-id="4FKBGCQrc1MkqIlnbavSnL"><!--pnid:ZCO0raTfmJyRZmcqxt7WLg-->负责范围</label><input data-page-node-id="k8NvPhH5fR1cmWH2G5oDTB" id="f-scope" placeholder="如：品牌识别 / 包装系统" type="text"></div>
+      <div data-page-node-id="iUIr1OWHcO5fzfNZVq02xQ" class="field full"><label data-page-node-id="H8cMssoPTN8OFTMGEHFpDI"><!--pnid:8Hzr33dsJRddBf154ELmZb-->简介 <span data-page-node-id="PCBR1svCdpG2J2XTYwnqQn"><!--pnid:mnC5JaGCvlsWlO5pVQ6UFx-->列表页卡片上的一句话</span></label><textarea data-page-node-id="RG6ApDbI9RbHoXJ6r6EYX8" id="f-desc" placeholder="一句话介绍这个作品"></textarea></div>
+      <div data-page-node-id="0b2Wo61m6dE6mz94SvHDN5" class="field full"><label data-page-node-id="xL8pTqva7JLNi8Cwkp0Zg7"><!--pnid:BSCxrmuZ1Aa2eJUvUsPbND-->导语 <span data-page-node-id="GGxG4pMdJWjoRWoF6FJ5uN"><!--pnid:5C5H0w079lUCZiamGNoBq3-->详情页开头的引导段落</span></label><textarea data-page-node-id="bePdMARZinECagYZIkjkbN" id="f-lead" placeholder="详情页的导语文字"></textarea></div>
+    </div>
+    <div data-page-node-id="5mvEvLkBsNER9J925lMniD" class="mfoot">
+      <span data-page-node-id="MHeSCLwbMpZKx8XVrLiT96" class="hint" id="edit-hint"></span>
+      <button data-page-node-id="aXdfzmXt3IdW1Qui37MhAL" class="btn danger sm" onclick="askDeleteProject()"><!--pnid:SaKLURAIptilmCyOjoJWL7-->删除此分区</button>
+      <button data-page-node-id="d1sYacGV6i98PtAAovKUuV" class="btn ghost sm" onclick="closeModal('mask-edit')" style="flex:none"><!--pnid:1hKla5FvbDXLVOOo5bIDuE-->取消</button>
+      <button data-page-node-id="bVpRDmZE5sVOSzCzHJSndH" class="btn primary sm" onclick="saveProjectMeta()" style="flex:none; min-width:96px"><!--pnid:dNofYyMx3tfm3TZFcWya0n-->保存</button>
+    </div>
+  </div>
+</div>
+
+<!--pnid:nGZoTYsaUtwVv3MqdnUwdj--><!-- 图片管理 -->
+<div data-page-node-id="xUHdj0Xrt5Gg212ThEwLsC" class="mask" id="mask-mgr" onclick="if(event.target===this)closeModal('mask-mgr')">
+  <div data-page-node-id="CV8mEWd4NEvFVZ0YwgVe3O" class="modal wide">
+    <div data-page-node-id="Dy826d4BrMDOjp61TZsXxm" class="mhead">
+      <h2 data-page-node-id="cytcR4izQ6WkT7cGFx1WVK" id="mgr-title"><!--pnid:kYjuW6qhJnUhSq8RXNvD1d-->图片管理</h2>
+      <button data-page-node-id="GInAOAh2ZlbqPdCB903tBH" class="mclose" onclick="closeModal('mask-mgr')"><svg data-page-node-id="d2ShyunDV1A9dCA5dmOU7E" fill="none" viewBox="0 0 24 24"><path data-page-node-id="8kBLENUeuZdHWR9t8I8NCF" d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-linecap="round" stroke-width="2.2"/></svg></button>
+    </div>
+    <div data-page-node-id="j1p70W9GgHcd5MNBEChsqv" class="mgr-top">
+      <span data-page-node-id="qckXNy5CaE58P8Qrhti1FF" class="tip"><!--pnid:bjFdZENIWU2h6RpWJ8e0PP-->拖动图片调顺序 · 第 1 张自动作为封面 · 「设为墙封」给全部作品页单独换封面（可和首页精选不同） · 点「裁剪」进 16:9 取景，框内拖动调画面，松手即存</span>
+      <input data-page-node-id="rtyaSv8ECcbCMwy0VxB1Fg" accept="image/*" id="file-input" multiple onchange="onFilesPicked(this)" type="file" style="display:none">
+      <button data-page-node-id="QbZhtw2e1ElUFVXB7eM77P" class="btn primary sm" onclick="document.getElementById('file-input').click()" style="flex:none">
+        <svg data-page-node-id="VbcRmMQ4fj42Z9Sh84kJtm" fill="none" viewBox="0 0 24 24"><path data-page-node-id="aQsCfdQ5Nbx1ShmFLwEf2v" d="M12 16V4m0 0l-4 4m4-4l4 4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/><path data-page-node-id="7y0MzuzVXEy9aOvQZj52lB" d="M4 16v3a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 20 19v-3" stroke="currentColor" stroke-linecap="round" stroke-width="2"/></svg><!--pnid:8kpjkFc1MJSdjUETgUk0UX-->
+        上传图片
+      </button>
+    </div>
+    <div data-page-node-id="E7VYPnRcQuyluGZa7DIC5x" class="img-grid" id="img-grid"></div>
+    <div data-page-node-id="sQW1Eao3JMQ5ZBXI3RwFCy" class="uploids" id="upl-box">
+      <div data-page-node-id="rxKiQr9zOWhtoGJRj5EwHe" class="ul-head"><span data-page-node-id="UOSw8aQBUNlXzsjEIfLOT2"><!--pnid:UfmEghkJvN2wBppnaQQCvV-->待上传（登录状态正常时点「开始上传」写入云端）</span><span data-page-node-id="W8nDkorrsuLiHA0SuZtaeY" class="g"></span>
+        <button data-page-node-id="po8Ydp2sHD0ZxSebafaZDI" class="btn primary sm" onclick="startUpload()" style="flex:none"><!--pnid:RauzMNQi3QFglK3vM5EHqk-->开始上传</button>
+        <button data-page-node-id="IjWiKzhzcGZe9tZdhoCPE0" class="btn ghost sm" onclick="clearPending()" style="flex:none"><!--pnid:IqxLZeAiNopgIRIzx6Ag1l-->清空</button>
+      </div>
+      <div data-page-node-id="ByCQq8zhgtudAkIW7jAzwG" class="ul-grid" id="ul-grid"></div>
+    </div>
+  </div>
+</div>
+
+<!--pnid:xaJ4YWGKyYbevLJiTZwZDu--><!-- 确认弹窗 -->
+<div data-page-node-id="nClGUpMVCrQNKE6yCPyU9H" class="mask" id="mask-confirm" onclick="if(event.target===this)closeModal('mask-confirm')">
+  <div data-page-node-id="mFSSOfHKycP3ORoWRGlbgL" class="modal small">
+    <div data-page-node-id="kowqEFKqq5EQdKdcR8TKYC" class="mhead"><h2 data-page-node-id="A0U4RUG2ODrynLboXuq488"><!--pnid:gtc0psqQs6gS2Ammw0EVsh-->确认操作</h2>
+      <button data-page-node-id="EcdaBuSDLodCqGRXYOTw8y" class="mclose" onclick="closeModal('mask-confirm')"><svg data-page-node-id="2Ap7jExwN7HaD0bvmmUXBD" fill="none" viewBox="0 0 24 24"><path data-page-node-id="MmTdv6lRXaOdXzD43c3xV5" d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-linecap="round" stroke-width="2.2"/></svg></button>
+    </div>
+    <div data-page-node-id="E8AWxtNvYa6KZDjF05dgbJ" class="confirm-text" id="confirm-text"></div>
+    <div data-page-node-id="BjlZ0XbH5wwWE8lNKCurXr" class="mfoot">
+      <button data-page-node-id="2LGMaipFu6dkyRpWD2IDlt" class="btn ghost sm" onclick="closeModal('mask-confirm')" style="flex:none"><!--pnid:iN2okn8xKMUo8lSjAXYLcs-->取消</button>
+      <button data-page-node-id="elnZP9j8z1IacTZBgeThgq" class="btn danger sm" id="confirm-ok" style="flex:none; min-width:88px"><!--pnid:2xskJatNpwHpHkP4Y2t4x5-->确认删除</button>
+    </div>
+  </div>
+</div>
+
+<div data-page-node-id="E3rclCxZCT2C6Xq9U2kyGw" class="toast" id="toast"></div>
+
+<script data-page-node-id="OixNLdfTgixT30Pmy85jC0" data-pnid-children="FtRblVb2foVM0UF0vHNWKR">
+/* =====================================================
+   数据层 —— 只负责读写资料库，不做渲染
+===================================================== */
+var IMG_DB  = "OHq8U8lir0HhYsGP0YBKh7";   // 作品集_图片
+var PROJ_DB = "WVDGlJJNC0P4uezL4zfsOv";   // 作品集_项目
+var SITE_DB = "R131oaJagutMboMT46eUH4";   // 作品集_站点（Hero/About/Contact 文案）
+
+var db = null;
+try { db = window.__SMART_PAGE__.database; } catch (e) { db = null; }
+
+var state = {
+  projects: [],
+  images: [],
+  config: { hero:{title:"",sub:"",lead:""}, about:{name:"",sub:"",body1:"",body2:"",caps:[]}, contact:{title:"",scope:"",phone:"",wechat:"",email:"",copyright:""} },
+  configRecId: null,
+  search: "",
+  editId: null,
+  mgrProjId: null,
+  pending: [],
+  dragIndex: -1,
+  cropId: null,
+  confirmFn: null,
+  writeFailed: false
+};
+
+function txt(v){ return (v === null || v === undefined) ? "" : String(v); }
+function numOf(v){ var n = Number(v); return isNaN(n) ? 0 : n; }
+function imgArr(v){ return (v && v.length) ? v : []; }
+function imgUrl(rec){
+  var a = imgArr(rec["图片"]);
+  return a[0] ? a[0].imageUrl : "";
+}
+/* 「裁剪」字段（x,y 两个 0-100 的数）→ object-position 百分比，缺省居中 */
+function cropOf(rec){
+  var p = txt(rec['裁剪']).split(',');
+  var x = Number(p[0]), y = Number(p[1]);
+  if (isNaN(x)) x = 50;
+  if (isNaN(y)) y = 50;
+  x = Math.max(0, Math.min(100, x));
+  y = Math.max(0, Math.min(100, y));
+  return Math.round(x) + '% ' + Math.round(y) + '%';
+}
+
+function loadAll(databaseId, startCursor, acc, guard){
+  acc = acc || []; guard = guard || 0;
+  if (guard > 100) return Promise.resolve(acc);
+  return db.query({ databaseId: databaseId, pageSize: 200, startCursor: startCursor })
+    .then(function(r){
+      acc = acc.concat(r.results || []);
+      var next = r.nextCursor;
+      if (r.hasMore && next && next !== startCursor && (r.results || []).length){
+        return loadAll(databaseId, next, acc, guard + 1);
+      }
+      return acc;
+    });
+}
+function fetchData(){
+  return Promise.all([
+    loadAll(PROJ_DB),
+    loadAll(IMG_DB),
+    loadAll(SITE_DB)
+  ]).then(function(rs){
+    state.projects = rs[0] || [];
+    state.images   = rs[1] || [];
+    var siteRows = rs[2] || [];
+    if (siteRows.length){
+      state.configRecId = siteRows[0]["_id"];
+      try {
+        var raw = txt(siteRows[0]["配置"]);
+        if (raw) state.config = JSON.parse(raw);
+      } catch(e){ /* 保留默认 config */ }
+    }
+  });
+}
+
+/* 计算层：排序、分组（供渲染层调用，渲染层之间不互调） */
+function sortedProjects(){
+  var list = state.projects.slice();
+  list.sort(function(a,b){ return numOf(a["项目顺序"]) - numOf(b["项目顺序"]); });
+  return list;
+}
+function projectsFiltered(){
+  var q = state.search.trim().toLowerCase();
+  var list = sortedProjects();
+  if (!q) return list;
+  return list.filter(function(p){
+    return (txt(p["名称"]) + txt(p["英文标题"]) + txt(p["分类"])).toLowerCase().indexOf(q) !== -1;
+  });
+}
+function imagesOf(projId){
+  var list = state.images.filter(function(m){ return txt(m["项目ID"]) === projId; });
+  list.sort(function(a,b){ return numOf(a["图片顺序"]) - numOf(b["图片顺序"]); });
+  return list;
+}
+function orphanImages(){
+  var ids = {};
+  state.projects.forEach(function(p){ ids[txt(p["项目ID"])] = 1; });
+  return state.images.filter(function(m){
+    var pid = txt(m["项目ID"]);
+    return !pid || !ids[pid];
+  });
+}
+function nextProjOrder(){
+  var max = 0;
+  state.projects.forEach(function(p){ max = Math.max(max, numOf(p["项目顺序"])); });
+  return max + 1;
+}
+
+/* =====================================================
+   图片选区缓存（IndexedDB）—— 防登录跳转丢文件
+===================================================== */
+var IDB_DB = "sp_form_img", IDB_STORE = "f";
+var idbKey = function(i){ return location.pathname + "::图片#" + i; };
+var idbFlagKey = "sp_img_flag_" + location.pathname;
+
+function idbOpen(){
+  return new Promise(function(resolve, reject){
+    if (!window.indexedDB) { reject(new Error("no idb")); return; }
+    var req = window.indexedDB.open(IDB_DB);
+    req.onsuccess = function(){
+      var d = req.result;
+      if (!d.objectStoreNames.contains(IDB_STORE)) {
+        var ver = d.version + 1; d.close();
+        var req2 = window.indexedDB.open(IDB_DB, ver);
+        req2.onupgradeneeded = function(ev){ ev.target.result.createObjectStore(IDB_STORE); };
+        req2.onsuccess = function(){ resolve(req2.result); };
+        req2.onerror = function(){ reject(req2.error); };
+        req2.onblocked = function(){ reject(new Error("blocked")); };
+      } else { resolve(d); }
+    };
+    req.onerror = function(){ reject(req.error); };
+  });
+}
+function idbTx(d, mode){
+  try { return d.transaction(IDB_STORE, mode).objectStore(IDB_STORE); }
+  catch(e){ return null; }
+}
+function idbSavePending(files){
+  return idbOpen().then(function(d){
+    var st = idbTx(d, "readwrite");
+    if (!st) return;
+    return new Promise(function(resolve){
+      var done = 0, total = files.length;
+      if (!total) { resolve(); return; }
+      var onOne = function(){ if (++done >= total) resolve(); };
+      for (var i = 0; i < total; i++){
+        var r = st.put(files[i], idbKey(i));
+        r.onsuccess = onOne; r.onerror = onOne;
+      }
+      try { localStorage.setItem(idbFlagKey, JSON.stringify({ n: total, ts: Date.now() })); } catch(e){}
+    });
+  }).catch(function(){ /* 静默降级 */ });
+}
+function idbLoadPending(){
+  return new Promise(function(resolve){
+    try {
+      var flag = JSON.parse(localStorage.getItem(idbFlagKey) || "null");
+      if (!flag || !flag.n || Date.now() - flag.ts > 48*3600*1000){ idbClearPending(); resolve([]); return; }
+    } catch(e){ resolve([]); return; }
+    idbOpen().then(function(d){
+      var st = idbTx(d, "readonly");
+      if (!st) { resolve([]); return; }
+      var out = [], done = 0;
+      var onOne = function(){
+        if (++done >= flag.n){ out = out.filter(Boolean); resolve(out); }
+      };
+      for (var i = 0; i < flag.n; i++){
+        (function(idx){
+          var r = st.get(idbKey(idx));
+          r.onsuccess = function(){ out[idx] = r.result; onOne(); };
+          r.onerror = onOne;
+        })(i);
+      }
+    }).catch(function(){ resolve([]); });
+  });
+}
+function idbClearPending(){
+  try { localStorage.removeItem(idbFlagKey); } catch(e){}
+  return idbOpen().then(function(d){
+    var st = idbTx(d, "readwrite");
+    if (!st) return;
+    for (var i = 0; i < 30; i++){ try { st.delete(idbKey(i)); } catch(e){} }
+  }).catch(function(){});
+}
+
+/* =====================================================
+   模块切换 + 文案表单渲染
+===================================================== */
+var MODULE_META = {
+  hero:   { title:'首屏 <em>Hero</em>', sub:['对应公开页封面层的引出句与背景图','只有你能改','保存即同步到公开页'] },
+  about:  { title:'关于 <em>About</em>', sub:['对应原网页「关于」区','自我介绍 + 能力与服务 6 项','只有你能改'] },
+  works:  { title:'作品 <em>Works</em>', sub:['每个分区 = 原网页里的一个作品位置','第 1 张图自动作为封面','只有你能改'] },
+  contact:{ title:'联系 <em>Contact</em>', sub:['对应原网页「联系」区','标题 / 简介 / 电话 / 微信','只有你能改'] },
+  collection:{ title:'作品合集 <em>Collection</em>', sub:['对应原网页「作品集」二级页','全部作品拼成一整墙','只有你能改'] },
+  gal:{ title:'环廊 <em>Gallery</em>', sub:['对应首页「横向环游」那一排','内容 = 精选之外的其它作品','只有你能改'] }
+};
+function showModule(name){
+  var btns = document.querySelectorAll('.rail .rbtn[data-module]');
+  btns.forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-module') === name); });
+  ['hero','about','works','collection','gal','contact'].forEach(function(m){
+    var sec = document.getElementById('mod-' + m);
+    if (sec) sec.classList.toggle('show', m === name);
+  });
+  var meta = MODULE_META[name] || { title:name, sub:[] };
+  document.getElementById('mod-title').innerHTML = meta.title;
+  var sub = document.getElementById('mod-sub');
+  sub.innerHTML = meta.sub.map(function(s){ return '<span>' + s + '</span>'; }).join('<span class="dot"></span>');
+  document.getElementById('search-box').style.display = (name === 'works') ? '' : 'none';
+  if (name === 'hero' || name === 'about' || name === 'contact'){
+    renderConfigForm(name);
+  }
+  if (name === 'collection'){
+    renderCollection();
+  }
+  if (name === 'gal'){
+    renderGallery();
+  }
+}
+function renderConfigForm(name){
+  var c = state.config;
+  if (name === 'hero'){
+    document.getElementById('h-lead').value  = (c.hero && c.hero.lead) || "";
+  } else if (name === 'about'){
+    document.getElementById('a-name').value  = (c.about && c.about.name) || "";
+    document.getElementById('a-sub').value   = (c.about && c.about.sub) || "";
+    document.getElementById('a-body1').value = (c.about && c.about.body1) || "";
+    document.getElementById('a-body2').value = (c.about && c.about.body2) || "";
+    renderCaps((c.about && c.about.caps) || []);
+    renderBadgePreview();
+  } else if (name === 'contact'){
+    document.getElementById('c-title').value     = (c.contact && c.contact.title) || "";
+    document.getElementById('c-scope').value     = (c.contact && c.contact.scope) || "";
+    document.getElementById('c-phone').value     = (c.contact && c.contact.phone) || "";
+    document.getElementById('c-wechat').value    = (c.contact && c.contact.wechat) || "";
+    document.getElementById('c-email').value     = (c.contact && c.contact.email) || "";
+    document.getElementById('c-copyright').value = (c.contact && c.contact.copyright) || "";
+  }
+}
+/* ---- V17：工牌正面图（关于区那张吊牌） ---- */
+function badgeCfg(){
+  if (!state.config.badge) state.config.badge = { imgUrl:'', fit:'contain' };
+  if (typeof state.config.badge.imgUrl !== 'string') state.config.badge.imgUrl = '';
+  if (state.config.badge.fit !== 'cover') state.config.badge.fit = 'contain';
+  return state.config.badge;
+}
+function badgeHint(msg){
+  var h = document.getElementById('badge-hint');
+  if (h) h.textContent = msg;
+}
+function renderBadgePreview(){
+  var box = document.getElementById('badge-preview');
+  var seg = document.getElementById('badge-fit-seg');
+  var b = badgeCfg();
+  if (box){
+    var u = String(b.imgUrl || '');
+    if (/^https?:/i.test(u)){
+      box.innerHTML = '<img src="' + esc(u) + '" alt="">';
+    } else if (u){
+      box.innerHTML = '<div class="ph">当前用的是随页面发布的内置图（' + esc(u) + '）。想换图：点「上传工牌图」。</div>';
+    } else {
+      box.innerHTML = '<div class="ph">当前是矢量文字版（DA / REAL）。上传一张图即可替换工牌正面。</div>';
+    }
+  }
+  if (seg){
+    var bs = seg.querySelectorAll('button');
+    for (var i = 0; i < bs.length; i++){
+      bs[i].className = (bs[i].getAttribute('data-fit') === b.fit) ? 'on' : '';
+    }
+  }
+}
+function onBadgePicked(input){
+  var file = input.files && input.files[0];
+  input.value = '';
+  if (!file) return;
+  if (file.size > 10 * 1024 * 1024){ toast('图片不能超过 10MB', true); return; }
+  if (!needDb()) return;
+  toast('正在上传工牌图…');
+  fileToBase64(file).then(function(b64){
+    return db.uploadImage({ data: b64, contentType: file.type || 'image/jpeg', fileName: file.name || 'badge.jpg' });
+  }).then(function(r){
+    if (!r || !r.url) throw new Error('上传失败');
+    badgeCfg().imgUrl = r.url;
+    renderBadgePreview();
+    badgeHint('已上传，点「保存关于」生效');
+    toast('工牌图已上传，记得点保存关于');
+  }).catch(function(e){ handleWriteErr(e); });
+}
+function clearBadge(){
+  badgeCfg().imgUrl = '';
+  renderBadgePreview();
+  badgeHint('已切回矢量版，点「保存关于」生效');
+  toast('已切回矢量版，记得点保存关于');
+}
+function setBadgeFit(fit){
+  badgeCfg().fit = (fit === 'cover') ? 'cover' : 'contain';
+  renderBadgePreview();
+  badgeHint('适配已切换，点「保存关于」生效');
+}
+function renderCaps(caps){
+  var block = document.getElementById('caps-block');
+  var html = "";
+  for (var i = 0; i < 6; i++){
+    var cap = caps[i] || { num:('0'+(i+1)), name:"", en:"" };
+    var num = cap.num || ('0'+(i+1));
+    html += '<div class="caps-row">'
+      + '<span class="cn">'+esc(num)+'</span>'
+      + '<input data-cap="'+i+'-name" type="text" placeholder="如：品牌设计" value="'+esc(cap.name||"")+'">'
+      + '<input data-cap="'+i+'-en" type="text" placeholder="如：BRAND DESIGN" value="'+esc(cap.en||"")+'">'
+      + '</div>';
+  }
+  block.innerHTML = html;
+}
+function saveConfig(name){
+  if (!needDb()) return;
+  var c = state.config;
+  if (name === 'hero'){
+    var prevHero = c.hero || {};
+    c.hero = {
+      title: prevHero.title || "",
+      sub:   prevHero.sub || "",
+      lead:  document.getElementById('h-lead').value.trim()
+    };
+    if (prevHero.bgImage) c.hero.bgImage = prevHero.bgImage;
+  } else if (name === 'about'){
+    var caps = [];
+    for (var i = 0; i < 6; i++){
+      caps.push({
+        num: ('0'+(i+1)),
+        name: document.querySelector('[data-cap="'+i+'-name"]').value.trim(),
+        en:   document.querySelector('[data-cap="'+i+'-en"]').value.trim()
+      });
+    }
+    c.about = {
+      name:  document.getElementById('a-name').value.trim(),
+      sub:   document.getElementById('a-sub').value.trim(),
+      body1: document.getElementById('a-body1').value.trim(),
+      body2: document.getElementById('a-body2').value.trim(),
+      caps:  caps
+    };
+  } else if (name === 'contact'){
+    c.contact = {
+      title:     document.getElementById('c-title').value.trim(),
+      scope:     document.getElementById('c-scope').value.trim(),
+      phone:     document.getElementById('c-phone').value.trim(),
+      wechat:    document.getElementById('c-wechat').value.trim(),
+      email:     document.getElementById('c-email').value.trim(),
+      copyright: document.getElementById('c-copyright').value.trim()
+    };
+  }
+  var payload = JSON.stringify(c);
+  var op;
+  if (state.configRecId){
+    op = db.updateRecord({ databaseId: SITE_DB, recordId: state.configRecId, properties: { "配置": { text: payload } } });
+  } else {
+    op = db.addRecord({ databaseId: SITE_DB, properties: { "配置": { text: payload } } })
+      .then(function(r){ state.configRecId = r && r._id; return r; });
+  }
+  op    .then(function(){
+      var map = { hero:'首屏已保存', about:'关于已保存', contact:'联系已保存', collection:'作品合集已保存' };
+      toast(map[name] || '已保存');
+    })
+    .catch(handleWriteErr);
+}
+
+/* =====================================================
+   渲染层 —— 各函数独立读数据渲染，互不调用（统一由 refresh 调度）
+===================================================== */
+function esc(s){
+  return txt(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+function renderStats(){
+  document.getElementById('stat-projects').textContent = state.projects.length;
+  document.getElementById('stat-images').textContent = state.images.length;
+}
+function renderProjects(){
+  var grid = document.getElementById('proj-grid');
+  var list = projectsFiltered();
+  document.getElementById('proj-cnt').textContent = list.length ? list.length + ' 个分区' : '';
+  var html = "";
+  list.forEach(function(p){
+    var pid = txt(p['项目ID']);
+    var imgs = imagesOf(pid);
+    var cover = imgs.length ? imgs[0] : null;
+    var coverUrl = cover ? imgUrl(cover) : '';
+    var showName = txt(p['名称']) || '(未命名分区)';
+    html += '<div class="pcard">'
+      + '<div class="cover">'
+      + (coverUrl ? '<img src="' + esc(coverUrl) + '" alt="" loading="lazy" style="--cp:' + cropOf(cover) + '">' : '')
+      + '<span class="num">' + esc(txt(p['英文标题']) || showName) + '</span>'
+      + '<span class="cnt">' + imgs.length + ' 张</span>'
+      + '</div>'
+      + '<div class="pmeta">'
+      + '<div class="pname">' + esc(showName) + '</div>'
+      + '<div class="pcat">' + esc(txt(p['年份'])) + (txt(p['年份']) && txt(p['分类']) ? ' · ' : '') + esc(txt(p['分类'])) + '</div>'
+      + '</div>'
+      + '<div class="pacts">'
+      + '<button class="btn primary" onclick="openManager(\'' + esc(p['_id']) + '\')">'
+      + '<svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="3" stroke="currentColor" stroke-width="2"/><path d="M4 16.5l4.5-3.5 3.5 2.5 3-2.5 5 3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+      + '图片管理</button>'
+      + '<button class="btn ghost" onclick="openEditor(\'' + esc(p['_id']) + '\')">'
+      + '<svg viewBox="0 0 24 24" fill="none"><path d="M4 20h4L19.5 8.5a2.1 2.1 0 0 0-3-3L5 17v3z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>'
+      + '编辑信息</button>'
+      + '</div>'
+      + '</div>';
+  });
+  html += '<div class="add-card" onclick="openEditor(null)">'
+    + '<div class="plus"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></div>'
+    + '<div style="font-size:14px;font-weight:500">新增作品分区</div>'
+    + '<div style="font-size:12.5px">新作品加进来，图后续随时传</div>'
+    + '</div>';
+  grid.innerHTML = html;
+}
+function renderOrphans(){
+  var wrap = document.getElementById('orphan-wrap');
+  var list = orphanImages();
+  document.getElementById('orphan-cnt').textContent = list.length ? list.length + ' 张' : '';
+  if (!list.length){
+    wrap.innerHTML = '<div class="empty-note">没有待归类的图片 —— 所有图都已挂到分区里。</div>';
+    return;
+  }
+  var opts = '<option value="">归入分区…</option>';
+  sortedProjects().forEach(function(p){
+    opts += '<option value="' + esc(txt(p['项目ID'])) + '">' + esc(txt(p['名称']) || txt(p['项目ID'])) + '</option>';
+  });
+  var html = '<div class="orphans">';
+  list.forEach(function(m){
+    html += '<div class="otile">'
+      + '<div class="othumb">' + (imgUrl(m) ? '<img src="' + esc(imgUrl(m)) + '" alt="" loading="lazy" style="--cp:' + cropOf(m) + '">' : '') + '</div>'
+      + '<select onchange="assignOrphan(\'' + esc(m['_id']) + '\', this.value)">' + opts + '</select>'
+      + '<div class="odel" style="cursor:pointer" onclick="askDeleteImage(\'' + esc(m['_id']) + '\')">删除这张图</div>'
+      + '</div>';
+  });
+  html += '</div>';
+  wrap.innerHTML = html;
+}
+function renderManager(){
+  var grid = document.getElementById('img-grid');
+  var p = null;
+  state.projects.forEach(function(x){ if (x['_id'] === state.mgrProjId) p = x; });
+  if (!p){ grid.innerHTML = ''; return; }
+  document.getElementById('mgr-title').textContent = '图片管理 · ' + (txt(p['名称']) || '(未命名分区)');
+  var imgs = imagesOf(txt(p['项目ID']));
+  var html = '';
+  var wallCover = txt(p['墙封面']);
+  imgs.forEach(function(m, i){
+    var cropping = state.cropId === m['_id'];
+    var isWall = !!wallCover && imgUrl(m) === wallCover;
+    html += '<div class="tile' + (cropping ? ' cropping' : '') + '" draggable="' + (cropping ? 'false' : 'true') + '" data-i="' + i + '" ondragstart="onDragStart(event)" ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">'
+      + (imgUrl(m) ? '<img src="' + esc(imgUrl(m)) + '" alt="" style="--cp:' + cropOf(m) + '">' : '')
+      + '<span class="idx">' + (i + 1) + '</span>'
+      + (i === 0 ? '<span class="cbadge">封面</span>' : '')
+      + (isWall ? '<span class="cbadge wall">墙封</span>' : '')
+      + '<span class="crop-hint">拖动图片调整 16:9 取景</span>'
+      + '<div class="tacts">'
+      + (cropping
+        ? '<button class="tbtn" onclick="event.stopPropagation();saveAndExitCrop()">完成裁剪</button>'
+         + '<button class="tbtn" onclick="event.stopPropagation();resetCrop()">居中</button>'
+        : (i !== 0 ? '<button class="tbtn" onclick="event.stopPropagation();setCover(\'' + esc(m['_id']) + '\')">设为封面</button>' : '<button class="tbtn" style="opacity:.55;cursor:default">当前封面</button>')
+         + (isWall
+           ? '<button class="tbtn" onclick="event.stopPropagation();clearWallCover()">取消墙封</button>'
+           : '<button class="tbtn" onclick="event.stopPropagation();setWallCover(\'' + esc(m['_id']) + '\')">设为墙封</button>')
+         + '<button class="tbtn" onclick="event.stopPropagation();enterCrop(\'' + esc(m['_id']) + '\')">裁剪</button>'
+         + '<button class="tbtn" onclick="event.stopPropagation();replaceImage(\'' + esc(m['_id']) + '\')">替换</button>'
+         + '<button class="tbtn del" onclick="event.stopPropagation();askDeleteImage(\'' + esc(m['_id']) + '\')"><svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16M9 7V5h6v2m-8 0l1 13h8l1-13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>')
+      + '</div>'
+      + '</div>';
+  });
+  html += '<div class="up-tile" onclick="document.getElementById(\'file-input\').click()">'
+    + '<svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>'
+    + '添加图片<br><span style="font-size:11.5px;color:#A0A0A8">可一次选多张</span></div>';
+  grid.innerHTML = html;
+  bindCropPan();
+}
+function renderPending(){
+  var box = document.getElementById('upl-box');
+  var grid = document.getElementById('ul-grid');
+  if (!state.pending.length){ box.classList.remove('show'); grid.innerHTML = ''; return; }
+  box.classList.add('show');
+  var html = '';
+  state.pending.forEach(function(f, i){
+    var url = f.__preview || '';
+    html += '<div class="ul-item">' + (url ? '<img src="' + esc(url) + '" alt="">'
+      : '<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:11px;color:#999">' + esc(f.name || '图片') + '</div>')
+      + '<button class="rm" onclick="removePending(' + i + ')">×</button></div>';
+  });
+  grid.innerHTML = html;
+}
+/* 统一刷新入口 */
+function refresh(){
+  renderStats();
+  renderProjects();
+  renderOrphans();
+  renderManager();
+  renderPending();
+  var g = document.getElementById('mod-gal');
+  if (g && g.classList.contains('show')) renderGallery();
+}
+
+/* ---- 首屏背景图上传 ---- */
+function renderHeroBgPreview(bgImage){
+  var box = document.getElementById('hero-bg-preview');
+  if (!box) return;
+  if (bgImage && bgImage.image && bgImage.image.images && bgImage.image.images.length){
+    box.innerHTML = '<img src="' + esc(bgImage.image.images[0].imageUrl) + '" alt="">';
+    box.classList.add('show');
+  } else {
+    box.innerHTML = '';
+    box.classList.remove('show');
+  }
+}
+function onHeroBgPicked(input){
+  var file = input.files && input.files[0];
+  input.value = '';
+  if (!file) return;
+  if (file.size > 10 * 1024 * 1024){ toast('图片不能超过 10MB', true); return; }
+  if (!needDb()) return;
+  toast('正在上传背景图…');
+  fileToBase64(file).then(function(b64){
+    return db.uploadImage({ data: b64, contentType: file.type || 'image/jpeg', fileName: file.name || 'hero.jpg' });
+  }).then(function(r){
+    if (!r || !r.url) throw new Error('上传失败');
+    if (!state.config.hero) state.config.hero = {};
+    state.config.hero.bgImage = { image: { images: [{ title: file.name || 'hero', imageUrl: r.url }] } };
+    renderHeroBgPreview(state.config.hero.bgImage);
+    document.getElementById('hero-bg-hint').textContent = '已上传，点「保存首屏」生效';
+    toast('背景图已上传，记得点保存首屏');
+  }).catch(function(e){ handleWriteErr(e); });
+}
+
+function clearHeroBg(){
+  if (!state.config.hero) return;
+  state.config.hero.bgImage = null;
+  renderHeroBgPreview(null);
+  var h = document.getElementById('hero-bg-hint');
+  if (h) h.textContent = '已移除，点「保存首屏」生效';
+  toast('背景图已移除，记得点保存首屏');
+}
+
+/* ---- 作品合集 ---- */
+function renderCollection(){
+  var list = sortedProjects();
+  document.getElementById('col-cnt').textContent = list.length ? list.length + ' 个项目' : '';
+  var html = '';
+  list.forEach(function(p){
+    var pid = txt(p['项目ID']);
+    var imgs = imagesOf(pid);
+    var cov = imgs.length ? imgUrl(imgs[0]) : '';
+    html += '<div class="col-row">'
+      + (cov ? '<img class="col-cov" src="' + esc(cov) + '" alt="" style="--cp:' + cropOf(imgs[0]) + '">' : '<div class="col-cov col-cov-empty"></div>')
+      + '<div class="col-meta"><div class="col-name">' + esc(txt(p['名称']) || '(未命名)') + '</div><div class="col-sub">' + imgs.length + ' 张 · ' + esc(txt(p['分类'])) + '</div></div>'
+      + '<input class="col-order" type="number" min="0" placeholder="不进合集" value="' + (numOf(p['合集排序']) ? numOf(p['合集排序']) : '') + '" data-pid="' + esc(pid) + '">'
+      + '</div>';
+  });
+  document.getElementById('col-list').innerHTML = html;
+  renderWallPreview();
+}
+function renderWallPreview(){
+  var wall = document.getElementById('wall-preview');
+  if (!wall) return;
+  var inCol = sortedProjects().filter(function(p){ return numOf(p['合集排序']) > 0; })
+    .sort(function(a,b){ return numOf(a['合集排序']) - numOf(b['合集排序']); });
+  if (!inCol.length){
+    wall.innerHTML = '<div class="empty-note">还没有项目设置进合集（在上方填数字即可）。</div>';
+    return;
+  }
+  var html = '';
+  inCol.forEach(function(p){
+    imagesOf(txt(p['项目ID'])).forEach(function(m){
+      var u = imgUrl(m);
+      if (u) html += '<div class="wall-item"><img src="' + esc(u) + '" alt="" style="--cp:' + cropOf(m) + '"></div>';
+    });
+  });
+  wall.innerHTML = html;
+}
+function saveCollectionOrder(){
+  if (!needDb()) return;
+  var inputs = document.querySelectorAll('#col-list .col-order');
+  var chain = Promise.resolve();
+  Array.prototype.forEach.call(inputs, function(inp){
+    var pid = inp.getAttribute('data-pid');
+    var val = inp.value.trim() === '' ? 0 : (Number(inp.value) || 0);
+    var rec = null;
+    state.projects.forEach(function(x){ if (txt(x['项目ID']) === pid) rec = x; });
+    if (!rec) return;
+    if (numOf(rec['合集排序']) === val) return;
+    chain = chain.then(function(){
+      return db.updateRecord({ databaseId: PROJ_DB, recordId: rec['_id'], properties: { '合集排序': { number: val } } });
+    });
+  });
+  chain.then(function(){ return fetchData(); })
+    .then(function(){ renderCollection(); toast('合集顺序已保存'); })
+    .catch(handleWriteErr);
+}
+
+/* ---- 环廊：内容 = 精选（项目顺序>0）之外的其它项目，按合集排序左→右 ---- */
+function galleryProjects(){
+  return sortedProjects()
+    .filter(function(p){ return numOf(p['项目顺序']) <= 0 && numOf(p['合集排序']) > 0; })
+    .sort(function(a,b){ return numOf(a['合集排序']) - numOf(b['合集排序']); });
+}
+function renderGallery(){
+  var list = sortedProjects().filter(function(p){ return numOf(p['项目顺序']) <= 0; });
+  var cnt = document.getElementById('gal-cnt');
+  if (cnt) cnt.textContent = list.length ? (galleryProjects().length + ' 个在环廊 / ' + list.length + ' 个可排') : '';
+  var html = '';
+  list.forEach(function(p){
+    var pid = txt(p['项目ID']);
+    var imgs = imagesOf(pid);
+    var cov = imgs.length ? imgUrl(imgs[0]) : '';
+    html += '<div class="col-row">'
+      + (cov ? '<img class="col-cov" src="' + esc(cov) + '" alt="" style="--cp:' + cropOf(imgs[0]) + '">' : '<div class="col-cov col-cov-empty"></div>')
+      + '<div class="col-meta"><div class="col-name">' + esc(txt(p['名称']) || '(未命名)') + '</div><div class="col-sub">' + imgs.length + ' 张 · ' + esc(txt(p['分类'])) + '</div></div>'
+      + '<input class="col-order" type="number" min="0" placeholder="不进环廊" value="' + (numOf(p['合集排序']) ? numOf(p['合集排序']) : '') + '" data-pid="' + esc(pid) + '">'
+      + '</div>';
+  });
+  var host = document.getElementById('gal-list');
+  if (host) host.innerHTML = html || '<div class="empty-note">还没有「精选之外」的项目。</div>';
+  var pv = document.getElementById('gal-preview');
+  if (pv){
+    var gp = galleryProjects();
+    pv.innerHTML = gp.length
+      ? gp.map(function(p){
+          var c = imagesOf(txt(p['项目ID']));
+          var u = c.length ? imgUrl(c[0]) : '';
+          return u ? '<div class="wall-item"><img src="' + esc(u) + '" alt="" style="--cp:' + cropOf(c[0]) + '"></div>' : '';
+        }).join('')
+      : '<div class="empty-note">环廊还没有项目。</div>';
+  }
+}
+function saveGalleryOrder(){
+  if (!needDb()) return;
+  var inputs = document.querySelectorAll('#gal-list .col-order');
+  var chain = Promise.resolve();
+  Array.prototype.forEach.call(inputs, function(inp){
+    var pid = inp.getAttribute('data-pid');
+    var val = inp.value.trim() === '' ? 0 : (Number(inp.value) || 0);
+    var rec = null;
+    state.projects.forEach(function(x){ if (txt(x['项目ID']) === pid) rec = x; });
+    if (!rec) return;
+    if (numOf(rec['合集排序']) === val) return;
+    chain = chain.then(function(){
+      return db.updateRecord({ databaseId: PROJ_DB, recordId: rec['_id'], properties: { '合集排序': { number: val } } });
+    });
+  });
+  chain.then(function(){ return fetchData(); })
+    .then(function(){ renderGallery(); toast('环廊顺序已保存'); })
+    .catch(handleWriteErr);
+}
+
+/* =====================================================
+   交互与数据操作（事件 → 改数据 → refresh）
+===================================================== */
+var toastTimer = null;
+function toast(msg, isErr){
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (isErr ? ' err' : '');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ t.className = 'toast' + (isErr ? ' err' : ''); }, 3200);
+}
+function openModal(id){ document.getElementById(id).classList.add('open'); }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+function onSearch(v){ state.search = v; refresh(); }
+function reloadAll(){
+  fetchData().then(function(){ refresh(); toast('已刷新'); })
+    .catch(function(e){ toast('刷新失败：' + (e && e.message || e), true); });
+}
+function needDb(){
+  if (!db){ toast('数据接口未就绪，请通过资料库页面打开', true); return false; }
+  return true;
+}
+function handleWriteErr(e){
+  state.writeFailed = true;
+  document.getElementById('perm-bar').classList.add('show');
+  toast('写入失败：需要所有者登录权限（' + (e && e.message || e) + '）', true);
+}
+
+/* ---- 编辑分区 ---- */
+function openEditor(recId){
+  if (!needDb()) return;
+  state.editId = recId;
+  var p = null;
+  state.projects.forEach(function(x){ if (x['_id'] === recId) p = x; });
+  document.getElementById('edit-title').textContent = p ? '编辑分区 · ' + (txt(p['名称']) || '未命名') : '新增作品分区';
+  document.getElementById('edit-hint').textContent = p ? '记录 ID：' + p['_id'] : '保存后即可上传图片';
+  document.getElementById('f-name').value  = p ? txt(p['名称']) : '';
+  document.getElementById('f-en').value    = p ? txt(p['英文标题']) : '';
+  document.getElementById('f-year').value  = p ? txt(p['年份']) : '';
+  document.getElementById('f-cat').value   = p ? txt(p['分类']) : '';
+  document.getElementById('f-role').value  = p ? txt(p['角色']) : '';
+  document.getElementById('f-scope').value = p ? txt(p['范围']) : '';
+  document.getElementById('f-desc').value  = p ? txt(p['简介']) : '';
+  document.getElementById('f-lead').value  = p ? txt(p['导语']) : '';
+  openModal('mask-edit');
+}
+function saveProjectMeta(){
+  var name = document.getElementById('f-name').value.trim();
+  if (!name){ toast('名称必填', true); return; }
+  var props = {
+    '名称':     { text: name },
+    '英文标题': { text: document.getElementById('f-en').value.trim() },
+    '年份':     { text: document.getElementById('f-year').value.trim() },
+    '分类':     { text: document.getElementById('f-cat').value.trim() },
+    '角色':     { text: document.getElementById('f-role').value.trim() },
+    '范围':     { text: document.getElementById('f-scope').value.trim() },
+    '简介':     { text: document.getElementById('f-desc').value.trim() },
+    '导语':     { text: document.getElementById('f-lead').value.trim() }
+  };
+  var op;
+  if (state.editId){
+    op = db.updateRecord({ databaseId: PROJ_DB, recordId: state.editId, properties: props });
+  } else {
+    props['项目ID'] = { text: 'proj_' + Date.now().toString(36) };
+    props['项目顺序'] = { number: nextProjOrder() };
+    op = db.addRecord({ databaseId: PROJ_DB, properties: props });
+  }
+  op.then(function(){
+    closeModal('mask-edit');
+    return fetchData().then(refresh);
+    }).then(function(){ toast(state.editId ? '分区已更新' : '分区已创建，去上传图片吧'); })
+    .catch(handleWriteErr);
+}
+function askDeleteProject(){
+  if (!state.editId) return;
+  var p = null;
+  state.projects.forEach(function(x){ if (x['_id'] === state.editId) p = x; });
+  if (!p) return;
+  var imgs = imagesOf(txt(p['项目ID']));
+  askConfirm(
+    '确定删除分区「' + (txt(p['名称']) || '未命名') + '」吗？' + (imgs.length ? '其中还有 <b>' + imgs.length + ' 张图</b>，会一并删除。' : ''),
+    function(){ doDeleteProject(p, imgs); }
+  );
+}
+function doDeleteProject(p, imgs){
+  var chain = Promise.resolve();
+  imgs.forEach(function(m){
+    chain = chain.then(function(){ return db.deleteRecord({ databaseId: IMG_DB, recordId: m['_id'] }); });
+  });
+  chain.then(function(){ return db.deleteRecord({ databaseId: PROJ_DB, recordId: p['_id'] }); })
+    .then(function(){
+      closeModal('mask-confirm'); closeModal('mask-edit');
+      return fetchData().then(refresh).then(function(){ toast('分区已删除'); });
+    })
+    .catch(handleWriteErr);
+}
+
+/* ---- 图片管理 ---- */
+function openManager(recId){
+  state.mgrProjId = recId;
+  state.dragIndex = -1;
+  state.pending = [];
+  refresh();
+  openModal('mask-mgr');
+}
+function onDragStart(ev){
+  var tile = ev.currentTarget;
+  state.dragIndex = Number(tile.getAttribute('data-i'));
+  tile.classList.add('dragging');
+  if (ev.dataTransfer) ev.dataTransfer.effectAllowed = 'move';
+}
+function onDragOver(ev){
+  if (state.dragIndex < 0) return;
+  ev.preventDefault();
+  ev.currentTarget.classList.add('drag-over');
+}
+function onDragLeave(ev){ ev.currentTarget.classList.remove('drag-over'); }
+function onDrop(ev){
+  ev.preventDefault();
+  ev.currentTarget.classList.remove('drag-over');
+  var to = Number(ev.currentTarget.getAttribute('data-i'));
+  var from = state.dragIndex;
+  state.dragIndex = -1;
+  if (isNaN(to) || isNaN(from) || from === to) return;
+  var p = null;
+  state.projects.forEach(function(x){ if (x['_id'] === state.mgrProjId) p = x; });
+  if (!p) return;
+  var imgs = imagesOf(txt(p['项目ID']));
+  var moved = imgs.splice(from, 1)[0];
+  imgs.splice(to, 0, moved);
+  persistOrder(imgs);
+  refresh();
+}
+function persistOrder(imgs){
+  if (!needDb()) return;
+  var chain = Promise.resolve();
+  imgs.forEach(function(m, i){
+    if (numOf(m['图片顺序']) === i + 1) return;
+    chain = chain.then(function(){
+      return db.updateRecord({ databaseId: IMG_DB, recordId: m['_id'], properties: { '图片顺序': { number: i + 1 } } });
+    });
+  });
+  chain.then(function(){ return fetchData(); })
+    .then(function(){ renderStats(); renderProjects(); renderManager(); toast('顺序已保存'); })
+    .catch(handleWriteErr);
+}
+function setCover(recId){
+  var rec = null;
+  state.images.forEach(function(m){ if (m['_id'] === recId) rec = m; });
+  if (!rec) return;
+  var imgs = imagesOf(txt(rec['项目ID']));
+  var idx = imgs.indexOf(rec);
+  if (idx <= 0) return;
+  imgs.splice(idx, 1);
+  imgs.unshift(rec);
+  persistOrder(imgs);
+  refresh();
+}
+/* ---- V26：墙封面（全部作品页专属封面，写项目表「墙封面」字段） ---- */
+function setWallCover(recId){
+  if (!needDb()) return;
+  var rec = null;
+  state.images.forEach(function(m){ if (m['_id'] === recId) rec = m; });
+  if (!rec) return;
+  var url = imgUrl(rec);
+  if (!url){ toast('这张图没有可用地址', true); return; }
+  var p = null;
+  state.projects.forEach(function(x){ if (x['_id'] === state.mgrProjId) p = x; });
+  if (!p){ toast('请先选择分区', true); return; }
+  db.updateRecord({ databaseId: PROJ_DB, recordId: p['_id'], properties: { '墙封面': { text: url } } })
+    .then(function(){ return fetchData(); })
+    .then(refresh)
+    .then(function(){ toast('已设为作品墙封面，公开页「全部作品」将用它当封面'); })
+    .catch(handleWriteErr);
+}
+function clearWallCover(){
+  if (!needDb()) return;
+  var p = null;
+  state.projects.forEach(function(x){ if (x['_id'] === state.mgrProjId) p = x; });
+  if (!p) return;
+  db.updateRecord({ databaseId: PROJ_DB, recordId: p['_id'], properties: { '墙封面': { text: '' } } })
+    .then(function(){ return fetchData(); })
+    .then(refresh)
+    .then(function(){ toast('已取消墙封面，作品墙恢复用第 1 张图'); })
+    .catch(handleWriteErr);
+}
+function askDeleteImage(recId){
+  askConfirm('确定删除这张图吗？删除后不可恢复。', function(){
+    db.deleteRecord({ databaseId: IMG_DB, recordId: recId })
+      .then(function(){ return fetchData(); })
+      .then(refresh)
+      .then(function(){ toast('图片已删除'); })
+      .catch(handleWriteErr);
+  });
+}
+function askConfirm(html, fn){
+  document.getElementById('confirm-text').innerHTML = html;
+  state.confirmFn = fn;
+  openModal('mask-confirm');
+}
+document.getElementById('confirm-ok').onclick = function(){
+  if (state.confirmFn) state.confirmFn();
+};
+
+/* ---- 上传（选图先缓存，点「开始上传」才写云端） ---- */
+function onFilesPicked(input){
+  var files = Array.prototype.slice.call(input.files || []);
+  input.value = '';
+  if (!files.length) return;
+  var bad = files.filter(function(f){ return f.size > 10 * 1024 * 1024; });
+  if (bad.length){ toast('有图片超过 10MB，请压缩后再传', true); return; }
+  var ok = files.filter(function(f){ return f.size <= 10 * 1024 * 1024; });
+  state.pending = state.pending.concat(ok);
+  previewPending();
+  idbSavePending(state.pending).then(function(){ /* 缓存完成 */ });
+}
+function previewPending(){
+  var jobs = [];
+  state.pending.forEach(function(f){
+    if (f.__preview) return;
+    jobs.push(new Promise(function(res){
+      var reader = new FileReader();
+      reader.onload = function(){ f.__preview = String(reader.result); res(); };
+      reader.onerror = function(){ res(); };
+      reader.readAsDataURL(f);
+    }));
+  });
+  Promise.all(jobs).then(renderPending);
+}
+function removePending(i){
+  state.pending.splice(i, 1);
+  idbSavePending(state.pending);
+  renderPending();
+}
+function clearPending(){
+  state.pending = [];
+  idbClearPending();
+  renderPending();
+}
+function fileToBase64(file){
+  return new Promise(function(resolve, reject){
+    var reader = new FileReader();
+    reader.onload = function(){ resolve(String(reader.result).split(',')[1] || ''); };
+    reader.onerror = function(){ reject(new Error('读取文件失败')); };
+    reader.readAsDataURL(file);
+  });
+}
+function uploadOne(file){
+  return fileToBase64(file).then(function(b64){
+    return db.uploadImage({ data: b64, contentType: file.type || 'image/jpeg', fileName: file.name || 'image.jpg' });
+  }).then(function(r){
+    if (!r || !r.url) throw new Error('上传失败：未返回图片地址');
+    return r.url;
+  });
+}
+function startUpload(){
+  if (!needDb()) return;
+  if (!state.pending.length){ toast('没有待上传的图片', true); return; }
+  var p = null;
+  state.projects.forEach(function(x){ if (x['_id'] === state.mgrProjId) p = x; });
+  if (!p){ toast('请先选择分区', true); return; }
+  var pid = txt(p['项目ID']);
+  var startIdx = imagesOf(pid).length;
+  toast('正在上传 ' + state.pending.length + ' 张…');
+  var chain = Promise.resolve();
+  state.pending.forEach(function(f, i){
+    chain = chain.then(function(){
+      return uploadOne(f).then(function(url){
+        return db.addRecord({
+          databaseId: IMG_DB,
+          properties: {
+            '项目':     { text: txt(p['名称']) },
+            '项目ID':   { text: pid },
+            '项目顺序': { number: numOf(p['项目顺序']) },
+            '图片顺序': { number: startIdx + i + 1 },
+            '标题':     { text: (txt(p['名称']) || pid) + '-' + (startIdx + i + 1) },
+            '图片':     { image: { images: [{ title: f.name || 'image', imageUrl: url }] } }
+          }
+        });
+      });
+    });
+  });
+  chain.then(function(){
+    state.pending = [];
+    return idbClearPending();
+  }).then(function(){
+    return fetchData();
+  }).then(function(){
+    refresh();
+    toast('上传完成，第 1 张自动成为封面');
+  }).catch(function(e){
+    fetchData().then(refresh);
+    handleWriteErr(e);
+  });
+}
+function restorePending(){
+  idbLoadPending().then(function(files){
+    if (files && files.length){
+      state.pending = files;
+      previewPending();
+      toast('有 ' + files.length + ' 张图待上传，打开对应分区的图片管理继续');
+    }
+  });
+}
+
+/* ---- 16:9 取景（裁剪）----
+   图片表「裁剪」字段存 x,y 两个 0-100 的数 = object-position 百分比。
+   点「裁剪」进入取景模式：框内拖动调画面，松手即保存；公开页按同款取景显示。 */
+function enterCrop(recId){
+  state.cropId = recId;
+  refresh();
+}
+function saveAndExitCrop(){
+  var el = document.querySelector('.tile.cropping');
+  var cp = el ? el.style.getPropertyValue('--cp') : '';
+  var p = cp ? cp.split(/[%\s]+/) : [];
+  var x = Number(p[0]), y = Number(p[1]);
+  state.cropId = null;
+  if (isNaN(x) || isNaN(y)){ refresh(); return; }
+  writeCrop(x, y);
+}
+function resetCrop(){ writeCrop(50, 50); }
+function writeCrop(x, y){
+  var id = state.cropId; state.cropId = null;
+  if (isNaN(x)) x = 50;
+  if (isNaN(y)) y = 50;
+  x = Math.max(0, Math.min(100, x));
+  y = Math.max(0, Math.min(100, y));
+  if (!needDb() || !id){ refresh(); return; }
+  db.updateRecord({ databaseId: IMG_DB, recordId: id, properties: { '裁剪': { text: Math.round(x) + ',' + Math.round(y) } } })
+    .then(function(){ return fetchData(); })
+    .then(function(){ refresh(); toast('取景已保存'); })
+    .catch(function(e){ handleWriteErr(e); refresh(); });
+}
+function bindCropPan(){
+  var el = document.querySelector('.tile.cropping');
+  if (!el) return;
+  var active = false, sx = 0, sy = 0, bx = 50, by = 50;
+  el.addEventListener('pointerdown', function(e){
+    if (e.button !== 0) return;
+    if (e.target.closest && e.target.closest('button')) return;
+    active = true; sx = e.clientX; sy = e.clientY;
+    var cur = (el.style.getPropertyValue('--cp') || '50% 50%').split(/[%\s]+/);
+    bx = Number(cur[0]) || 50; by = Number(cur[1]) || 50;
+    try { el.setPointerCapture(e.pointerId); } catch(err){}
+  });
+  el.addEventListener('pointermove', function(e){
+    if (!active) return;
+    var r = el.getBoundingClientRect();
+    var nx = Math.max(0, Math.min(100, bx - (e.clientX - sx) / r.width * 100));
+    var ny = Math.max(0, Math.min(100, by - (e.clientY - sy) / r.height * 100));
+    el.style.setProperty('--cp', nx.toFixed(1) + '% ' + ny.toFixed(1) + '%');
+  });
+  el.addEventListener('pointerup', function(){
+    if (!active) return;
+    active = false;
+    var p = (el.style.getPropertyValue('--cp') || '50% 50%').split(/[%\s]+/);
+    writeCrop(Number(p[0]), Number(p[1]));
+  });
+}
+
+/* ---- 待归类 ---- */
+function assignOrphan(recId, projId){
+  if (!projId) return;
+  var p = null;
+  state.projects.forEach(function(x){ if (txt(x['项目ID']) === projId) p = x; });
+  if (!p) return;
+  var nextIdx = imagesOf(projId).length + 1;
+  db.updateRecord({
+    databaseId: IMG_DB,
+    recordId: recId,
+    properties: {
+      '项目ID':   { text: projId },
+      '项目':     { text: txt(p['名称']) },
+      '项目顺序': { number: numOf(p['项目顺序']) },
+      '图片顺序': { number: nextIdx }
+    }
+  }).then(function(){ return fetchData(); })
+    .then(refresh)
+    .then(function(){ toast('已归入「' + (txt(p['名称']) || projId) + '」'); })
+    .catch(handleWriteErr);
+}
+
+/* ---- 初始化：加载数据 → 一次性渲染 ---- */
+function init(){
+  document.addEventListener('keydown', function(ev){
+    if (ev.key === 'Escape'){
+      closeModal('mask-edit'); closeModal('mask-mgr'); closeModal('mask-confirm');
+    }
+  });
+  showModule('works');
+  if (!db){
+    document.getElementById('sync-pill').textContent = '数据接口不可用';
+    document.getElementById('perm-bar').classList.add('show');
+    refresh();
+    return;
+  }
+  fetchData().then(function(){
+    document.getElementById('sync-pill').textContent = '已连接云端 · 实时同步';
+    refresh();
+    restorePending();
+    if (typeof db.onUpdated === 'function'){
+      var busy = false;
+      db.onUpdated(function(payload){
+        var ids = (payload && payload.databaseIds) || [];
+        if (ids.indexOf(IMG_DB) === -1 && ids.indexOf(PROJ_DB) === -1 && ids.indexOf(SITE_DB) === -1) return;
+        if (busy) return;
+        busy = true;
+        fetchData().then(function(){ refresh(); })
+          .then(function(){ busy = false; })
+          .catch(function(){ busy = false; });
+      });
+    }
+  }).catch(function(e){
+    document.getElementById('sync-pill').textContent = '云端连接失败 · 离线';
+    document.getElementById('perm-bar').classList.add('show');
+    refresh();
+  });
+}
+if (document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
+</script>
+</body>
+</html>
